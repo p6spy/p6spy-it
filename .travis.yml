@@ -9,7 +9,7 @@ before_install:
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
-script: mvn -version; mvn clean install -P travis --settings ~/.m2/itSettings.xml
+script: mvn -version; mvn clean install --settings ~/.m2/itSettings.xml
 
 notifications:
  email:
