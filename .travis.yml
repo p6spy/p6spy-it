@@ -1,0 +1,16 @@
+language: java
+
+jdk:
+  - oraclejdk7
+
+before_install:
+ - "sudo apt-get update -qq"
+
+before_script:
+ - groovy script/travis/generateMavenSettingsForIT.groovy
+  
+script: mvn -version; mvn clean verify -P travis --settings ~/.m2/itSettings.xml
+
+notifications:
+ email:
+   - p6spy-developers@googlegroups.com
