@@ -6,6 +6,9 @@ jdk:
 before_install:
  - "sudo apt-get update -qq"
 
+install: mvn dependency:resolve dependency:resolve-plugins
+ 
+
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
