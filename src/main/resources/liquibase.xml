@@ -51,8 +51,8 @@
     </loadData>
   </changeSet>
 
-  <changeSet id="create-test-proc-h2" author="quintonm">
-    <!-- used by P6TestCallableStatement -->
+<!--   <changeSet id="create-test-proc-h2" author="quintonm">
+    used by P6TestCallableStatement
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>
     </preConditions>
@@ -65,7 +65,7 @@
   </changeSet>
   
   <changeSet id="create-test-proc-oracle" author="quintonm">
-    <!-- used by P6TestCallableStatement -->
+    used by P6TestCallableStatement
     <preConditions onFail="CONTINUE">
       <dbms type="Oracle"/>
     </preConditions>
@@ -79,11 +79,11 @@
   </changeSet>
   
   <changeSet id="create-test-proc-mysql" author="quintonm">
-    <!-- used by P6TestCallableStatement -->
+    used by P6TestCallableStatement
     <preConditions onFail="CONTINUE">
       <dbms type="MySQL"/>
     </preConditions>
-    <!-- liquibase does not drop stored procedures automatically -->
+    liquibase does not drop stored procedures automatically
     <sql>
       drop function if exists test_proc
     </sql>
@@ -97,7 +97,7 @@
   </changeSet>
   
   <changeSet id="create-sleep-proc" author="quintonm">
-    <!-- used by P6TestOutage -->
+    used by P6TestOutage
     <preConditions onFail="CONTINUE">
       <dbms type="H2"/>
     </preConditions>
@@ -110,5 +110,5 @@
       } $$;      
     </createProcedure>
   </changeSet>
-
+ -->
 </databaseChangeLog>
