@@ -130,7 +130,7 @@
             </deployer>
             <deployables>
               <deploy>
-                <pingURL>http://localhost:8080/p6spy-test-webapp/index.jsp</pingURL>
+                <pingURL>http://localhost:8080/${project.artifactId}-${project.version}/index.jsp</pingURL>
               </deploy>
             </deployables>
             <configuration>
