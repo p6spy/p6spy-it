@@ -9,8 +9,8 @@ before_install:
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
-script: mvn -version; mvn clean install --settings ~/.m2/itSettings.xml
+script: mvn -version; mvn clean install -P tomcat-6.x --settings ~/.m2/itSettings.xml
 
 notifications:
- email:
-   - p6spy-developers@googlegroups.com
+ email: false
+#   - p6spy-developers@googlegroups.com
