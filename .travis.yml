@@ -6,13 +6,13 @@ jdk:
 before_install:
  - "sudo apt-get update -qq"
 
-install: mvn dependency:resolve dependency:resolve-plugins
+install: mvn -B dependency:resolve dependency:resolve-plugins
  
 
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
-script: mvn -version; mvn clean install -P tomcat-7.x --settings ~/.m2/itSettings.xml
+script: mvn -version; mvn -B clean install -P tomcat-7.x --settings ~/.m2/itSettings.xml
 
 notifications:
  email: false
