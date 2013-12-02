@@ -12,7 +12,7 @@ install: mvn dependency:resolve dependency:resolve-plugins
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
-script: mvn -version; mvn clean install -P tomcat-6.x --settings ~/.m2/itSettings.xml
+script: mvn -version; mvn clean install -P tomcat-7.x --settings ~/.m2/itSettings.xml
 
 notifications:
  email: false
