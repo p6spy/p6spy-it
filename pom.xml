@@ -109,7 +109,6 @@
                   <groupId>log4j</groupId>
                   <artifactId>log4j</artifactId>
                 </dependency>
-
                 <dependency>
                   <groupId>com.h2database</groupId>
                   <artifactId>h2</artifactId>
@@ -418,10 +417,12 @@
             <configuration>
               <container>
                 <containerId>tomcat8x</containerId>
-                <zipUrlInstaller>
-                  <url>http://apache.mirror.digionline.de/tomcat/tomcat-8/v8.0.0-RC5/bin/apache-tomcat-8.0.0-RC5.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>tomcat</artifactId>
+                  <version>8.0.0-RC5</version>
+                  <type>zip</type>
+                </artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -438,9 +439,12 @@
             <configuration>
               <container>
                 <containerId>tomcat7x</containerId>
-                <zipUrlInstaller>
-                  <url>http://apache.lehtivihrea.org/tomcat/tomcat-7/v7.0.47/bin/apache-tomcat-7.0.47.zip</url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                  <groupId>org.apache.tomcat</groupId>
+                  <artifactId>tomcat</artifactId>
+                  <version>7.0.47</version>
+                  <type>zip</type>
+                </artifactInstaller>
               </container>
             </configuration>
           </plugin>
