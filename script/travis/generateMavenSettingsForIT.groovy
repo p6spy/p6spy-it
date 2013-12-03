@@ -32,6 +32,37 @@ profiles[0].append(NodeBuilder.newInstance().profile {
   }
 })
 
+println "Appending profile for codehaus snapshots repository"
+profiles[0].append(NodeBuilder.newInstance().profile {
+  id('codehaus-snapshots')
+  repositories {
+    repository {
+      id('codehaus-snapshots')
+      releases {
+        enabled('false')
+      }
+      snapshots {
+        enabled('true')
+      }
+      name('codehaus-snapshots')
+      url('http://nexus.codehaus.org/snapshots/')
+    }
+  }
+  pluginRepositories {
+    pluginRepository {
+      id('codehaus-snapshots')
+      releases {
+        enabled('false')
+      }
+      snapshots {
+        enabled('true')
+      }
+      name('codehaus-snapshots')
+      url('http://nexus.codehaus.org/snapshots/')
+    }
+  }
+})
+
 def activeProfiles = settings.activeProfiles
 if( activeProfiles.size() == 0 ) {
   // create the node if it did not exist
@@ -40,6 +71,7 @@ if( activeProfiles.size() == 0 ) {
 }
 
 activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('cloudbees'))
+activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('codehaus-snapshots'))
 
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'itSettings.xml')
