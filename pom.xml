@@ -170,8 +170,7 @@
               <phase>pre-integration-test</phase>
               <goals>
                 <goal>start</goal>
-                <!-- redeploy instead of deploy, to make glassfish happy -->
-                <goal>redeploy</goal>
+                <goal>deploy</goal>
               </goals>
             </execution>
             <execution>
@@ -321,6 +320,17 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <executions>
+	            <execution>
+	              <id>start-container</id>
+	              <phase>pre-integration-test</phase>
+	              <goals>
+	                <goal>start</goal>
+	                <!-- redeploy instead of deploy, to make glassfish happy -->
+	                <goal>redeploy</goal>
+	              </goals>
+	            </execution>
+           	  </executions>
               <container>
                 <containerId>glassfish4x</containerId>
                 <zipUrlInstaller>
@@ -340,6 +350,17 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <executions>
+	            <execution>
+	              <id>start-container</id>
+	              <phase>pre-integration-test</phase>
+	              <goals>
+	                <goal>start</goal>
+	                <!-- redeploy instead of deploy, to make glassfish happy -->
+	                <goal>redeploy</goal>
+	              </goals>
+	            </execution>
+           	  </executions>
               <container>
                 <containerId>glassfish3x</containerId>
                 <zipUrlInstaller>
@@ -422,6 +443,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+             <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat8x</containerId>
                 <artifactInstaller>
@@ -444,6 +475,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat7x</containerId>
                 <artifactInstaller>
@@ -466,6 +507,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat6x</containerId>
                 <zipUrlInstaller>
