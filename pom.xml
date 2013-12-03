@@ -247,7 +247,7 @@
                 <containerId>jboss72x</containerId>
                 <artifactInstaller>
                 	<groupId>org.jboss.as</groupId>
-                	<artifactId>jboss-as-parent</artifactId>
+                	<artifactId>jboss-as-dist</artifactId>
                 	<version>7.2.0.Final</version>
                	</artifactInstaller>
               </container>
