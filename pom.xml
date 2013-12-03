@@ -272,6 +272,16 @@
 					<version>6.1.0.Final</version>
                	</artifactInstaller>
               </container>
+			  <configuration>
+			     <home>${project.build.directory}/cargo/configurations/jboss61x</home>
+			    <configfiles>
+			      <configfile>
+			        <file>${project.basedir}/src/main/config/jboss61x/deployers/jbossws.deployer/META-INF/stack-agnostic-jboss-beans.xml</file>
+			        <todir>deployers/jbossws.deployer/META-INF</todir>
+			      </configfile>
+			    </configfiles>
+			  </configuration> 
+  
             </configuration>
           </plugin>
         </plugins>
