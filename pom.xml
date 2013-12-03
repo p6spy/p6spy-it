@@ -104,7 +104,6 @@
 
   <build>
     <finalName>${project.artifactId}</finalName>
-    
     <pluginManagement>
       <plugins>
         <plugin>
@@ -621,6 +620,4 @@
       </build>
     </profile>
   </profiles>
-
-
 </project>

@@ -6,7 +6,7 @@
 *.ear
 /atlassian-ide-plugin.xml
 /*.iml
-/target
 .settings
 .classpath
 .project
+target
