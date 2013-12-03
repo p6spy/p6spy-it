@@ -425,6 +425,11 @@
                   <type>zip</type>
                 </artifactInstaller>
               </container>
+              <configuration>
+                <properties>
+                  <cargo.jvmargs>-Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+                </properties>
+              </configuration>
             </configuration>
           </plugin>
         </plugins>
