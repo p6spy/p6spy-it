@@ -96,6 +96,7 @@
   </dependencies>
 
   <build>
+    <finalName>p6spy-it</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -124,7 +125,7 @@
             </deployer>
             <deployables>
               <deploy>
-                <pingURL>http://localhost:8080/p6spy-test-webapp/index.jsp</pingURL>
+                <pingURL>http://localhost:8080/p6spy-it/index.jsp</pingURL>
               </deploy>
             </deployables>
             <configuration>
@@ -446,6 +447,11 @@
                   <type>zip</type>
                 </artifactInstaller>
               </container>
+              <configuration>
+                <properties>
+                  <cargo.jvmargs>-Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+                </properties>
+              </configuration>
             </configuration>
           </plugin>
         </plugins>
