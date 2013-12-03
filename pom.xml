@@ -236,7 +236,7 @@
       </build>
     </profile>
     <profile>
-      <id>jboss-7.2.x</id>
+      <id>jboss-7.1.x</id>
       <build>
         <plugins>
           <plugin>
@@ -244,11 +244,11 @@
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
               <container>
-                <containerId>jboss72x</containerId>
+                <containerId>jboss71x</containerId>
                 <artifactInstaller>
-                	<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-distribution</artifactId>
-                	<version>7.2.0.Final</version>
+                	<groupId>org.jboss.as</groupId>
+                	<artifactId>jboss-as-dist</artifactId>
+                	<version>7.1.1.Final</version>
                	</artifactInstaller>
               </container>
             </configuration>
@@ -287,11 +287,9 @@
             <configuration>
               <container>
                 <containerId>jboss51x</containerId>
-                <artifactInstaller>
-                	<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-dist</artifactId>
-					<version>5.1.0.GA</version>
-               	</artifactInstaller>
+                <zipUrlInstaller>
+					<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet</url>
+				</zipUrlInstaller>
               </container>
             </configuration>
           </plugin>
