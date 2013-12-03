@@ -86,7 +86,8 @@
     <dependency>
       <groupId>p6spy</groupId>
       <artifactId>p6spy</artifactId>
-      <version>LATEST</version>
+      <!-- workaround: 2.0-SNAPSHOT is considered later than 2.0.0-SNAPSHOT => LATEST doesn't work here -->
+      <version>2.0.0-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
@@ -102,6 +103,8 @@
   </dependencies>
 
   <build>
+    <finalName>${project.artifactId}</finalName>
+    
     <pluginManagement>
       <plugins>
         <plugin>
@@ -130,7 +133,7 @@
             </deployer>
             <deployables>
               <deploy>
-                <pingURL>http://localhost:8080/${project.artifactId}-${project.version}/index.jsp</pingURL>
+                <pingURL>http://localhost:8080/${project.artifactId}/index.jsp</pingURL>
               </deploy>
             </deployables>
             <configuration>
@@ -233,7 +236,7 @@
       </build>
     </profile>
     <profile>
-      <id>jboss-7.1.x</id>
+      <id>jboss-7.2.x</id>
       <build>
         <plugins>
           <plugin>
@@ -241,10 +244,12 @@
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
               <container>
-                <containerId>jboss71x</containerId>
-                <zipUrlInstaller>
-                  <url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</url>
-                </zipUrlInstaller>
+                <containerId>jboss72x</containerId>
+                <artifactInstaller>
+                	<groupId>org.jboss.as</groupId>
+                	<artifactId>jboss-as-parent</artifactId>
+                	<version>7.2.0.Final</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -301,11 +306,11 @@
             <configuration>
               <container>
                 <containerId>jboss42x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-4.2.3.GA%2F&amp;ts=1385979521&amp;se_mirror=cznic
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-dist</artifactId>
+					<version>4.2.3.GA</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -382,11 +387,11 @@
             <configuration>
               <container>
                 <containerId>jetty9x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/stable-9/dist/jetty-distribution-9.1.0.v20131115.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-project</artifactId>
+                	<version>9.1.0.v20131115</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -403,11 +408,11 @@
             <configuration>
               <container>
                 <containerId>jetty8x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/8.1.14.v20131031/dist/jetty-distribution-8.1.14.v20131031.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-project</artifactId>
+                	<version>8.1.14.v20131031</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -424,11 +429,11 @@
             <configuration>
               <container>
                 <containerId>jetty7x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/7.6.14.v20131031/dist/jetty-distribution-7.6.14.v20131031.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-project</artifactId>
+                	<version>7.6.14.v20131031</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -528,7 +533,8 @@
         </plugins>
       </build>
     </profile>
-    <profile>
+    <!-- TODO: missing url/maven repo to download from  -->
+    <!-- <profile>
       <id>weblogic-12.x</id>
       <build>
         <plugins>
@@ -539,15 +545,14 @@
               <container>
                 <containerId>weblogic12x</containerId>
                 <zipUrlInstaller>
-                  <!-- TODO deploy to cloudbees! -->
-                  <url>http://apache.imsam.info/tomcat/tomcat-6/v6.0.37/bin/apache-tomcat-6.0.37.zip</url>
+                  <url>TODO</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
           </plugin>
         </plugins>
       </build>
-    </profile>
+    </profile> -->
     <profile>
       <id>resin-4.x</id>
       <build>
