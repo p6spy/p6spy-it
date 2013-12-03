@@ -6,3 +6,4 @@
 *.ear
 /atlassian-ide-plugin.xml
 /*.iml
+target
