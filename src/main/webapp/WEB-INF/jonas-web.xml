@@ -1,0 +1,4 @@
+<jonas-resource>
+	<res-ref-name>jdbc/p6spy</res-ref-name>
+	<jndi-name>java:jdbc/p6spy</jndi-name>
+</jonas-resource>
