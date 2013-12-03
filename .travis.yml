@@ -25,12 +25,12 @@ env:
     
 before_install:
  - "sudo apt-get update -qq"
+ - groovy script/travis/generateMavenSettingsForIT.groovy # need cargo snapshots repo
 
-install: mvn -B dependency:resolve dependency:resolve-plugins
+install: mvn -B dependency:resolve dependency:resolve-plugins --settings ~/.m2/itSettings.xml
  
-
-before_script:
- - groovy script/travis/generateMavenSettingsForIT.groovy
+#before_script:
+# - groovy script/travis/generateMavenSettingsForIT.groovy
   
 script: mvn -version; mvn clean -B verify -P ${AS} --settings ~/.m2/itSettings.xml
 
