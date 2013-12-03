@@ -3,6 +3,26 @@ language: java
 jdk:
   - oraclejdk7
 
+env:
+  matrix:
+    - AS=wildfly-8.x
+    - AS=jboss-7.1.x
+    - AS=jboss-6.1.x
+    - AS=jboss-5.1.x
+    - AS=jboss-4.2.x
+    - AS=glassfish-4.x
+    - AS=glassfish-3.x
+    - AS=jetty-9.x
+    - AS=jetty-8.x
+    - AS=jetty-7.x
+    - AS=tomcat-8.x
+    - AS=tomcat-7.x
+    - AS=tomcat-6.x
+    #- AS=weblogic-12.x
+    - AS=resin-4.x
+    - AS=jonas-5.x
+    - AS=geronimo-3.x
+    
 before_install:
  - "sudo apt-get update -qq"
 
@@ -12,7 +32,7 @@ install: mvn -B dependency:resolve dependency:resolve-plugins
 before_script:
  - groovy script/travis/generateMavenSettingsForIT.groovy
   
-script: mvn -version; mvn -B clean install -P tomcat-7.x --settings ~/.m2/itSettings.xml
+script: mvn -version; mvn clean -B verify -P ${AS} --settings ~/.m2/itSettings.xml
 
 notifications:
  email: false

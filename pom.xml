@@ -62,7 +62,13 @@
       <version>1.7.5</version>
     </dependency>
 
-    <!-- -->
+	<!-- tests -->
+	<dependency>
+		<groupId>commons-io</groupId>
+		<artifactId>commons-io</artifactId>
+		<version>2.4</version>
+		<scope>test</scope>
+	</dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -80,7 +86,8 @@
     <dependency>
       <groupId>p6spy</groupId>
       <artifactId>p6spy</artifactId>
-      <version>LATEST</version>
+      <!-- workaround: 2.0-SNAPSHOT is considered later than 2.0.0-SNAPSHOT => LATEST doesn't work here -->
+      <version>2.0.0-SNAPSHOT</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
@@ -96,7 +103,7 @@
   </dependencies>
 
   <build>
-    <finalName>p6spy-it</finalName>
+    <finalName>${project.artifactId}</finalName>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -125,13 +132,14 @@
             </deployer>
             <deployables>
               <deploy>
-                <pingURL>http://localhost:8080/p6spy-it/index.jsp</pingURL>
+                <pingURL>http://localhost:8080/${project.artifactId}/index.jsp</pingURL>
               </deploy>
             </deployables>
             <configuration>
               <properties>
                 <!-- p6spy understands system properties -->
-                <cargo.jvmargs>-Dspy.properties=${project.build.directory}/spy.log</cargo.jvmargs>
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log</cargo.jvmargs>
 
                 <!-- <cargo.jvmargs>-Dspy.properties=${project.build.directory}/spy.log 
                   -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=y</cargo.jvmargs> -->
@@ -164,8 +172,7 @@
               <phase>pre-integration-test</phase>
               <goals>
                 <goal>start</goal>
-                <!-- redeploy instead of deploy, to make glassfish happy -->
-                <goal>redeploy</goal>
+                <goal>deploy</goal>
               </goals>
             </execution>
             <execution>
@@ -237,9 +244,11 @@
             <configuration>
               <container>
                 <containerId>jboss71x</containerId>
-                <zipUrlInstaller>
-                  <url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.as</groupId>
+                	<artifactId>jboss-as-dist</artifactId>
+                	<version>7.1.1.Final</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -256,10 +265,22 @@
             <configuration>
               <container>
                 <containerId>jboss61x</containerId>
-                <zipUrlInstaller>
-                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-distribution</artifactId>
+					<version>6.1.0.Final</version>
+               	</artifactInstaller>
               </container>
+			  <configuration>
+			     <home>${project.build.directory}/cargo/configurations/jboss61x</home>
+			    <configfiles>
+			      <configfile>
+			        <file>${project.basedir}/src/main/config/jboss61x/deployers/jbossws.deployer/META-INF/stack-agnostic-jboss-beans.xml</file>
+			        <todir>deployers/jbossws.deployer/META-INF</todir>
+			      </configfile>
+			    </configfiles>
+			  </configuration> 
+  
             </configuration>
           </plugin>
         </plugins>
@@ -276,10 +297,8 @@
               <container>
                 <containerId>jboss51x</containerId>
                 <zipUrlInstaller>
-                  <url>
-                    http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet
-                  </url>
-                </zipUrlInstaller>
+					<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet</url>
+				</zipUrlInstaller>
               </container>
             </configuration>
           </plugin>
@@ -296,11 +315,11 @@
             <configuration>
               <container>
                 <containerId>jboss42x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-4.2.3.GA%2F&amp;ts=1385979521&amp;se_mirror=cznic
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-dist</artifactId>
+					<version>4.2.3.GA</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -315,6 +334,17 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <executions>
+	            <execution>
+	              <id>start-container</id>
+	              <phase>pre-integration-test</phase>
+	              <goals>
+	                <goal>start</goal>
+	                <!-- redeploy instead of deploy, to make glassfish happy -->
+	                <goal>redeploy</goal>
+	              </goals>
+	            </execution>
+           	  </executions>
               <container>
                 <containerId>glassfish4x</containerId>
                 <zipUrlInstaller>
@@ -334,6 +364,17 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <executions>
+	            <execution>
+	              <id>start-container</id>
+	              <phase>pre-integration-test</phase>
+	              <goals>
+	                <goal>start</goal>
+	                <!-- redeploy instead of deploy, to make glassfish happy -->
+	                <goal>redeploy</goal>
+	              </goals>
+	            </execution>
+           	  </executions>
               <container>
                 <containerId>glassfish3x</containerId>
                 <zipUrlInstaller>
@@ -355,11 +396,11 @@
             <configuration>
               <container>
                 <containerId>jetty9x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/stable-9/dist/jetty-distribution-9.1.0.v20131115.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-distribution</artifactId>
+                	<version>9.1.0.v20131115</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -376,11 +417,11 @@
             <configuration>
               <container>
                 <containerId>jetty8x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/8.1.14.v20131031/dist/jetty-distribution-8.1.14.v20131031.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-distribution</artifactId>
+                	<version>8.1.14.v20131031</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -397,11 +438,11 @@
             <configuration>
               <container>
                 <containerId>jetty7x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/jetty/7.6.14.v20131031/dist/jetty-distribution-7.6.14.v20131031.zip
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.eclipse.jetty</groupId>
+                	<artifactId>jetty-distribution</artifactId>
+                	<version>7.6.14.v20131031</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -416,6 +457,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+             <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat8x</containerId>
                 <artifactInstaller>
@@ -425,11 +476,6 @@
                   <type>zip</type>
                 </artifactInstaller>
               </container>
-              <configuration>
-                <properties>
-                  <cargo.jvmargs>-Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
-                </properties>
-              </configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -443,6 +489,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat7x</containerId>
                 <artifactInstaller>
@@ -452,11 +508,6 @@
                   <type>zip</type>
                 </artifactInstaller>
               </container>
-              <configuration>
-                <properties>
-                  <cargo.jvmargs>-Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
-                </properties>
-              </configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -470,6 +521,16 @@
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+              <configuration>
+               <properties>
+                <!-- p6spy understands system properties -->
+                <!-- tomcat specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
+				-Dp6spy.config.logfile=${project.build.directory}/spy.log
+				-Dp6spy.config.driverlist=org.h2.Driver
+				</cargo.jvmargs>
+		       </properties>
+			  </configuration>
               <container>
                 <containerId>tomcat6x</containerId>
                 <zipUrlInstaller>
@@ -481,7 +542,8 @@
         </plugins>
       </build>
     </profile>
-    <profile>
+    <!-- TODO: missing url/maven repo to download from  -->
+    <!-- <profile>
       <id>weblogic-12.x</id>
       <build>
         <plugins>
@@ -492,15 +554,14 @@
               <container>
                 <containerId>weblogic12x</containerId>
                 <zipUrlInstaller>
-                  <!-- TODO deploy to cloudbees! -->
-                  <url>http://apache.imsam.info/tomcat/tomcat-6/v6.0.37/bin/apache-tomcat-6.0.37.zip</url>
+                  <url>TODO</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
           </plugin>
         </plugins>
       </build>
-    </profile>
+    </profile> -->
     <profile>
       <id>resin-4.x</id>
       <build>
@@ -550,8 +611,7 @@
               <container>
                 <containerId>geronimo3x</containerId>
                 <zipUrlInstaller>
-                  <url>http://mirror.netcologne.de/apache.org/geronimo/3.0.1/geronimo-tomcat7-minimal-3.0.1-bin.zip
-                  </url>
+                  <url>http://mirror.netcologne.de/apache.org/geronimo/3.0.1/geronimo-tomcat7-javaee6-web-3.0.1-bin.tar.gz</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
@@ -560,6 +620,4 @@
       </build>
     </profile>
   </profiles>
-
-
 </project>

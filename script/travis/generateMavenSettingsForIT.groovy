@@ -41,7 +41,6 @@ if( activeProfiles.size() == 0 ) {
 
 activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('cloudbees'))
 
-
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'itSettings.xml')
 println "Writing ${targetFile.absolutePath}"
