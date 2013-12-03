@@ -246,8 +246,8 @@
               <container>
                 <containerId>jboss72x</containerId>
                 <artifactInstaller>
-                	<groupId>org.jboss.as</groupId>
-                	<artifactId>jboss-as-dist</artifactId>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-distribution</artifactId>
                 	<version>7.2.0.Final</version>
                	</artifactInstaller>
               </container>
@@ -266,9 +266,11 @@
             <configuration>
               <container>
                 <containerId>jboss61x</containerId>
-                <zipUrlInstaller>
-                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-distribution</artifactId>
+					<version>6.1.0.Final</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -285,11 +287,11 @@
             <configuration>
               <container>
                 <containerId>jboss51x</containerId>
-                <zipUrlInstaller>
-                  <url>
-                    http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet
-                  </url>
-                </zipUrlInstaller>
+                <artifactInstaller>
+                	<groupId>org.jboss.jbossas</groupId>
+					<artifactId>jboss-as-dist</artifactId>
+					<version>5.1.0.GA</version>
+               	</artifactInstaller>
               </container>
             </configuration>
           </plugin>
@@ -389,7 +391,7 @@
                 <containerId>jetty9x</containerId>
                 <artifactInstaller>
                 	<groupId>org.eclipse.jetty</groupId>
-                	<artifactId>jetty-project</artifactId>
+                	<artifactId>jetty-distribution</artifactId>
                 	<version>9.1.0.v20131115</version>
                	</artifactInstaller>
               </container>
@@ -410,7 +412,7 @@
                 <containerId>jetty8x</containerId>
                 <artifactInstaller>
                 	<groupId>org.eclipse.jetty</groupId>
-                	<artifactId>jetty-project</artifactId>
+                	<artifactId>jetty-distribution</artifactId>
                 	<version>8.1.14.v20131031</version>
                	</artifactInstaller>
               </container>
@@ -431,7 +433,7 @@
                 <containerId>jetty7x</containerId>
                 <artifactInstaller>
                 	<groupId>org.eclipse.jetty</groupId>
-                	<artifactId>jetty-project</artifactId>
+                	<artifactId>jetty-distribution</artifactId>
                 	<version>7.6.14.v20131031</version>
                	</artifactInstaller>
               </container>
