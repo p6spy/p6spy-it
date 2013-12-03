@@ -48,6 +48,19 @@ profiles[0].append(NodeBuilder.newInstance().profile {
       url('http://nexus.codehaus.org/snapshots/')
     }
   }
+  pluginRepositories {
+    pluginRepository {
+      id('codehaus-snapshots')
+      releases {
+        enabled('false')
+      }
+      snapshots {
+        enabled('true')
+      }
+      name('codehaus-snapshots')
+      url('http://nexus.codehaus.org/snapshots/')
+    }
+  }
 })
 
 def activeProfiles = settings.activeProfiles
