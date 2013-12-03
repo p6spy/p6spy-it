@@ -612,8 +612,7 @@
               <container>
                 <containerId>geronimo3x</containerId>
                 <zipUrlInstaller>
-                  <url>http://mirror.netcologne.de/apache.org/geronimo/3.0.1/geronimo-tomcat7-minimal-3.0.1-bin.zip
-                  </url>
+                  <url>http://mirror.netcologne.de/apache.org/geronimo/3.0.1/geronimo-tomcat7-javaee6-web-3.0.1-bin.tar.gz</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
