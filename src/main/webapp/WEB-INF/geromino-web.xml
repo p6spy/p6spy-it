@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app configId="HelloJonasWeb"
+   xmlns="http://geronimo.apache.org/xml/ns/j2ee/web-1.0"
+   xmlns:naming="http://geronimo.apache.org/xml/ns/naming-1.0" 
+   xmlns:sec="http://geronimo.apache.org/xml/ns/security-1.0"       
+   xmlns:sys="http://geronimo.apache.org/xml/ns/deployment-1.0">
+
+<!-- sample found on: http://www.ibm.com/developerworks/websphere/library/techarticles/0702_dougherty/0702_dougherty.html -->
+<naming:resource-ref>
+	<naming:ref-name>jdbc/p6spy</naming:ref-name>
+	<naming:resource-link>java:jdbc/p6spy</naming:resource-link>
+</naming:resource-ref>
+
+</web-app>

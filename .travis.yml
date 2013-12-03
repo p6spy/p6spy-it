@@ -6,6 +6,7 @@ jdk:
 env:
   matrix:
     - AS=jonas-5.x
+    - AS=geronimo-3.x
     
 before_install:
  - "sudo apt-get update -qq"
