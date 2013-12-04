@@ -22,6 +22,8 @@ env:
     - AS=resin-4.x
     - AS=jonas-5.x
     - AS=geronimo-3.x
+    - AS=geronimo-2.2.x
+    - AS=geronimo-2.1.x
     
 before_install:
  - "sudo apt-get update -qq"

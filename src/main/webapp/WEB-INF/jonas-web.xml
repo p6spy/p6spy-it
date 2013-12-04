@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<jonas-web-app xmlns="http://www.objectweb.org/jonas/ns"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.objectweb.org/jonas/ns
+	  http://www.objectweb.org/jonas/ns/jonas-web-app_4_0.xsd">
+
+	<!-- sample found on: http://www.ibm.com/developerworks/websphere/library/techarticles/0702_dougherty/0702_dougherty.html -->
+	<jonas-resource>
+		<res-ref-name>jdbc/p6spy</res-ref-name>
+		<jndi-name>java:jdbc/p6spy</jndi-name>
+	</jonas-resource>
+
+</jonas-web-app>
