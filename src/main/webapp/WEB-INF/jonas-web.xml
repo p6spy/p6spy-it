@@ -8,7 +8,8 @@
 	<!-- sample found on: http://www.ibm.com/developerworks/websphere/library/techarticles/0702_dougherty/0702_dougherty.html -->
 	<jonas-resource>
 		<res-ref-name>jdbc/p6spy</res-ref-name>
-		<jndi-name>java:jdbc/p6spy</jndi-name>
+		<!-- jonas has trouble with default jndi ('/' might be problematic) -->
+		<jndi-name>jdbc_p6spy</jndi-name>
 	</jonas-resource>
 
 </jonas-web-app>

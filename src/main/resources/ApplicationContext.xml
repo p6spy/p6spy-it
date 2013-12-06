@@ -21,13 +21,22 @@
     <property name="dataSource" ref="dataSource"/>
     <property name="changeLog" value="classpath:liquibase.xml"/>
   </bean>
-
-  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-    <property name="jndiName" value="java:comp/env/jdbc/p6spy"/>
-    <property name="resourceRef" value="true"/>
-  </bean>
-
+  
   <bean id="dbQuery" class="com.p6spy.testwebapp.DbQuery" depends-on="liquibase"/>
 
-
+  <beans profile="common">
+	  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName" value="java:comp/env/jdbc/p6spy"/>
+	    <property name="resourceRef" value="true"/>
+	  </bean>
+  </beans>
+  
+  <!-- jonas has trouble with default jndi ('/' might be problematic) -->
+  <beans profile="jonas">
+	  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
+	    <property name="jndiName" value="jdbc_p6spy"/>
+	    <property name="resourceRef" value="true"/>
+	  </bean>
+  </beans>
+  
 </beans>
