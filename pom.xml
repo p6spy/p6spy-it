@@ -31,6 +31,8 @@
 -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=123456,server=y,suspend=y
 	
  -->
+ 	<!-- only specific web servers require this one, so empty in common -->
+ 	<web.xml.resource-ref.mapped-name></web.xml.resource-ref.mapped-name>
    </properties>
 
   <dependencies>
@@ -220,6 +222,23 @@
           </executions>
         </plugin>
 
+		<plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+           <webResources>
+             <webResource>
+               <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+               <includes>
+                 <include>web.xml</include>
+               </includes>
+               <targetPath>WEB-INF</targetPath>
+               <filtering>true</filtering>
+             </webResource>
+           </webResources>
+         </configuration> 
+        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -279,56 +298,70 @@
     </profile>
     
     <profile>
-      <id>jboss-6.1.x</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.cargo</groupId>
-            <artifactId>cargo-maven2-plugin</artifactId>
-            <configuration>
-              <container>
-                <containerId>jboss61x</containerId>
-                <artifactInstaller>
-                	<groupId>org.jboss.jbossas</groupId>
-					<artifactId>jboss-as-distribution</artifactId>
-					<version>6.1.0.Final</version>
-               	</artifactInstaller>
-              </container>
-			  <configuration>
-			     <home>${project.build.directory}/cargo/configurations/jboss61x</home>
-			    <configfiles>
-			      <configfile>
-			        <file>${project.basedir}/src/main/config/jboss61x/deployers/jbossws.deployer/META-INF/stack-agnostic-jboss-beans.xml</file>
-			        <todir>deployers/jbossws.deployer/META-INF</todir>
-			      </configfile>
-			    </configfiles>
-			  </configuration> 
-  
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    
-    <profile>
-      <id>jboss-5.1.x</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.cargo</groupId>
-            <artifactId>cargo-maven2-plugin</artifactId>
-            <configuration>
-              <container>
-                <containerId>jboss51x</containerId>
-                <zipUrlInstaller>
-					<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet</url>
-				</zipUrlInstaller>
-              </container>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
+	<id>jboss-6.1.x</id>
+	<!-- jboss of this version needs this for correct Datasource mapping -->
+	<properties>
+		<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+		</web.xml.resource-ref.mapped-name>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<configuration>
+					<container>
+						<containerId>jboss61x</containerId>
+						<artifactInstaller>
+							<groupId>org.jboss.jbossas</groupId>
+							<artifactId>jboss-as-distribution</artifactId>
+							<version>6.1.0.Final</version>
+						</artifactInstaller>
+					</container>
+					<configuration>
+						<home>${project.build.directory}/cargo/configurations/jboss61x</home>
+						<configfiles>
+							<configfile>
+								<file>${project.basedir}/src/main/config/jboss61x/deployers/jbossws.deployer/META-INF/stack-agnostic-jboss-beans.xml</file>
+								<todir>deployers/jbossws.deployer/META-INF</todir>
+							</configfile>
+						</configfiles>
+					</configuration>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</profile>
+
+	<profile>
+		<id>jboss-5.1.x</id>
+		<!-- jboss of this version needs this for correct Datasource mapping -->
+		<properties>
+			<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+			</web.xml.resource-ref.mapped-name>
+		</properties>
+		<build>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.cargo</groupId>
+					<artifactId>cargo-maven2-plugin</artifactId>
+					<configuration>
+						<container>
+							<containerId>jboss51x</containerId>
+							<zipUrlInstaller>
+								<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-5.1.0.GA%2F&amp;ts=1385979505&amp;use_mirror=surfnet</url>
+							</zipUrlInstaller>
+						</container>
+					</configuration>
+				</plugin>
+			</plugins>
+		</build>
+	</profile>
     
     <profile>
       <id>jboss-4.2.x</id>

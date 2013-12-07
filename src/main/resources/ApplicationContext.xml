@@ -22,7 +22,9 @@
     <property name="changeLog" value="classpath:liquibase.xml"/>
   </bean>
   
-  <bean id="dbQuery" class="com.p6spy.testwebapp.DbQuery" depends-on="liquibase"/>
+  <bean id="dbQuery" class="com.p6spy.testwebapp.DbQuery" depends-on="liquibase">
+  	<property name="dataSource" ref="dataSource"/>
+  </bean>
 
   <beans profile="common">
 	  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
