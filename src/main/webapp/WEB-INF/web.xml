@@ -8,7 +8,8 @@
           <res-ref-name>jdbc/p6spy</res-ref-name>
           <res-type>javax.sql.DataSource</res-type>
           <res-auth>Container</res-auth>
-        <res-sharing-scope>Shareable</res-sharing-scope>
+          <res-sharing-scope>Shareable</res-sharing-scope>
+          <mapped-name>java:/jdbc/p6spy</mapped-name>
     </resource-ref>
          
   <context-param>
