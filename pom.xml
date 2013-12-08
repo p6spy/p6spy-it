@@ -314,11 +314,16 @@
 				<configuration>
 					<container>
 						<containerId>jboss61x</containerId>
-						<artifactInstaller>
+						<!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+						<zipUrlInstaller>
+		                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
+		                </zipUrlInstaller>
+						<!-- <artifactInstaller>
 							<groupId>org.jboss.jbossas</groupId>
 							<artifactId>jboss-as-distribution</artifactId>
 							<version>6.1.0.Final</version>
-						</artifactInstaller>
+						</artifactInstaller> -->
 					</container>
 					<configuration>
 						<home>${project.build.directory}/cargo/configurations/jboss61x</home>
@@ -675,13 +680,18 @@
 				<configuration>
 					<container>
 						<containerId>jonas5x</containerId>
-						<artifactInstaller>
+						<!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+						<zipUrlInstaller>
+		                  <url>http://download.forge.objectweb.org/jonas/jonas-full-5.3.0-bin.zip</url>
+		                </zipUrlInstaller>
+						<!-- <artifactInstaller>
 							<groupId>org.ow2.jonas.assemblies.profiles.legacy</groupId>
 							<artifactId>jonas-full</artifactId>
 							<version>5.3.0</version>
 							<classifier>bin</classifier>
 							<type>tar.gz</type>
-						</artifactInstaller>
+						</artifactInstaller> -->
 					</container>
 					<configuration>
 						<properties>
@@ -773,13 +783,18 @@
 			  </configuration>
               <container>
                 <containerId>geronimo2x</containerId>
-                <artifactInstaller>
+                <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+				Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+				<zipUrlInstaller>
+                  <url>http://apache.openmirror.de/geronimo/2.2.1/geronimo-tomcat6-javaee5-2.2.1-bin.zip</url>
+                </zipUrlInstaller>
+                <!-- <artifactInstaller>
                   <groupId>org.apache.geronimo.assemblies</groupId>
                   <artifactId>geronimo-tomcat6-javaee5</artifactId>
                   <version>2.2.1</version>
                   <classifier>bin</classifier>
                   <type>tar.gz</type>
-                </artifactInstaller>
+                </artifactInstaller> -->
               </container>
             </configuration>
           </plugin>
