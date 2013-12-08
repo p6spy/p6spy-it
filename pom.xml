@@ -786,7 +786,7 @@
                 <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 				Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
 				<zipUrlInstaller>
-                  http://apache.openmirror.de/geronimo/2.2.1/geronimo-tomcat6-javaee5-2.2.1-bin.zip
+                  <url>http://apache.openmirror.de/geronimo/2.2.1/geronimo-tomcat6-javaee5-2.2.1-bin.zip</url>
                 </zipUrlInstaller>
                 <!-- <artifactInstaller>
                   <groupId>org.apache.geronimo.assemblies</groupId>
