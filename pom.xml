@@ -296,7 +296,7 @@
                 <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
                 <zipUrlInstaller>
-                	<url>http://search.maven.org/remotecontent?filepath=org/jboss/as/jboss-as-dist/7.1.1.Final/jboss-as-dist-7.1.1.Final.zip</url>
+                	<url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</url>
                 </zipUrlInstaller>
                 <!-- <artifactInstaller>
                 	<groupId>org.jboss.as</groupId>
@@ -345,7 +345,7 @@
 						<!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
 						<zipUrlInstaller>
-		                  <url>http://search.maven.org/remotecontent?filepath=org/jboss/jbossas/jboss-as-distribution/6.1.0.Final/jboss-as-distribution-6.1.0.Final.zip</url>
+		                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
 		                </zipUrlInstaller> 
 						<!-- 
 						<artifactInstaller>
@@ -422,7 +422,7 @@
                 <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
                 <zipUrlInstaller>
-					<url>http://search.maven.org/remotecontent?filepath=org/jboss/jbossas/jboss-as-dist/4.2.3.GA/jboss-as-dist-4.2.3.GA.zip</url>
+					<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-4.2.3.GA&amp;2F&amp;ts=1386624449&amp;use_mirror=surfnet</url>
 				</zipUrlInstaller>
                 <!-- 
                 <artifactInstaller>
