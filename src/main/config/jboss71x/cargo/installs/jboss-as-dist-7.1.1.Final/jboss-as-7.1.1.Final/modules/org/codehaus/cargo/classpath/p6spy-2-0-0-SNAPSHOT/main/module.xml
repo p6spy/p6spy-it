@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.0" name="org.codehaus.cargo.classpath.p6spy-2-0-0-SNAPSHOT">
+  <resources>
+    <resource-root path="p6spy-2-0-0-SNAPSHOT.jar"/>
+  </resources>
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="javax.transaction.api"/>
+    <!-- (hardcoded) all the p6spy dependencies --> 
+    <module name="org.codehaus.cargo.classpath.h2-1-3-173" />
+    <module name="org.codehaus.cargo.classpath.log4j-1-2-17" />
+  </dependencies>
+</module>

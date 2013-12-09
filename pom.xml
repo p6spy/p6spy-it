@@ -158,7 +158,7 @@
             <configuration>
               <properties>
                 <!-- p6spy understands system properties -->
-                 <cargo.jvmargs>${cargo.jvmargs.common}</cargo.jvmargs> 
+                <cargo.jvmargs>${cargo.jvmargs.common}</cargo.jvmargs> 
 				<cargo.servlet.port>8080</cargo.servlet.port>
 
                 <!-- just temporary, to prove things work at all with h2 -->
@@ -277,6 +277,14 @@
     
     <profile>
       <id>jboss-7.1.x</id>
+      	<!-- jboss of this version needs this for correct Datasource mapping -->
+	<properties>
+		<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+		</web.xml.resource-ref.mapped-name>
+	</properties>
+      
       <build>
         <plugins>
           <plugin>
@@ -285,12 +293,32 @@
             <configuration>
               <container>
                 <containerId>jboss71x</containerId>
-                <artifactInstaller>
+                <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+                <zipUrlInstaller>
+                	<url>http://search.maven.org/remotecontent?filepath=org/jboss/as/jboss-as-dist/7.1.1.Final/jboss-as-dist-7.1.1.Final.zip</url>
+                </zipUrlInstaller>
+                <!-- <artifactInstaller>
                 	<groupId>org.jboss.as</groupId>
                 	<artifactId>jboss-as-dist</artifactId>
                 	<version>7.1.1.Final</version>
-               	</artifactInstaller>
+               	</artifactInstaller> -->
               </container>
+              <configuration>
+              <properties>
+                <!-- p6spy understands system properties -->
+                <!-- jboss 7.1 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+              </properties>
+					<home>${project.build.directory}/cargo/jboss71x</home>
+					<files>
+						<file>
+							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
+							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
+							<todir>../installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
+						</file>
+					</files>
+				</configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -317,13 +345,15 @@
 						<!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
 						<zipUrlInstaller>
-		                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
-		                </zipUrlInstaller>
-						<!-- <artifactInstaller>
+		                  <url>http://search.maven.org/remotecontent?filepath=org/jboss/jbossas/jboss-as-distribution/6.1.0.Final/jboss-as-distribution-6.1.0.Final.zip</url>
+		                </zipUrlInstaller> 
+						<!-- 
+						<artifactInstaller>
 							<groupId>org.jboss.jbossas</groupId>
 							<artifactId>jboss-as-distribution</artifactId>
 							<version>6.1.0.Final</version>
-						</artifactInstaller> -->
+						</artifactInstaller>
+						-->
 					</container>
 					<configuration>
 						<home>${project.build.directory}/cargo/configurations/jboss61x</home>
@@ -334,7 +364,6 @@
 							</configfile>
 						</configfiles>
 					</configuration>
-
 				</configuration>
 			</plugin>
 		</plugins>
@@ -373,16 +402,35 @@
       <build>
         <plugins>
           <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>${basedir}/src/main/webapp-jboss-4.2.x</directory>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+      
+          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
               <container>
                 <containerId>jboss42x</containerId>
+                <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+                <zipUrlInstaller>
+					<url>http://search.maven.org/remotecontent?filepath=org/jboss/jbossas/jboss-as-dist/4.2.3.GA/jboss-as-dist-4.2.3.GA.zip</url>
+				</zipUrlInstaller>
+                <!-- 
                 <artifactInstaller>
                 	<groupId>org.jboss.jbossas</groupId>
 					<artifactId>jboss-as-dist</artifactId>
 					<version>4.2.3.GA</version>
                	</artifactInstaller>
+               	 -->
               </container>
             </configuration>
           </plugin>
@@ -423,7 +471,7 @@
               </container>
               <configuration>
 	              <properties>
-	              	<!-- as glassfish 4 compplains about not present (__default) one, 
+	              	<!-- as glassfish 4 complains about not present (__default) one, 
 	              		see: https://s3.amazonaws.com/archive.travis-ci.org/jobs/14888766/log.txt -->
 	                <cargo.datasource.datasource.__default>
 	                  cargo.datasource.driver=org.h2.Driver|
