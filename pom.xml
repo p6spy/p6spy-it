@@ -257,6 +257,13 @@
   <profiles>
     <profile>
       <id>wildfly-8.x</id>
+<!-- jboss of this version needs this for correct Datasource mapping -->
+	  <properties>
+		<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+		</web.xml.resource-ref.mapped-name>
+	  </properties>      
       <build>
         <plugins>
           <plugin>
@@ -269,6 +276,21 @@
                   <url>http://download.jboss.org/wildfly/8.0.0.Beta1/wildfly-8.0.0.Beta1.zip</url>
                 </zipUrlInstaller>
               </container>
+              <configuration>
+	              <properties>
+	                <!-- p6spy understands system properties -->
+	                <!-- wildfly 8 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+	              </properties>
+					<home>${project.build.directory}/cargo/wildfly8x</home>
+					<files>
+						<file>
+							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
+							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
+							<todir>../installs/wildfly-8.0.0.Beta1/wildfly-8.0.0.Beta1/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
+						</file>
+					</files>
+				</configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -277,15 +299,15 @@
     
     <profile>
       <id>jboss-7.1.x</id>
-      	<!-- jboss of this version needs this for correct Datasource mapping -->
-	<properties>
+	  <!-- jboss of this version needs this for correct Datasource mapping -->
+	  <properties>
 		<web.xml.resource-ref.mapped-name><![CDATA[
 <mapped-name>java:/jdbc/p6spy</mapped-name> 	
 ]]>
 		</web.xml.resource-ref.mapped-name>
-	</properties>
-      
-      <build>
+	  </properties>
+
+	  <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
@@ -305,17 +327,24 @@
                	</artifactInstaller> -->
               </container>
               <configuration>
-              <properties>
-                <!-- p6spy understands system properties -->
-                <!-- jboss 7.1 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
-                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
-              </properties>
+	              <properties>
+	                <!-- p6spy understands system properties -->
+	                <!-- jboss 7.1 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+	              </properties>
 					<home>${project.build.directory}/cargo/jboss71x</home>
 					<files>
+						<!-- path if using artifactInstaller -->
 						<file>
 							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
 							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
 							<todir>../installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
+						</file>
+						<!-- path if using zipUrlInstaller -->
+						<file>
+							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
+							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
+							<todir>../installs/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
 						</file>
 					</files>
 				</configuration>
