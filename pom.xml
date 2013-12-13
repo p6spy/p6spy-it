@@ -62,7 +62,7 @@
       <artifactId>liquibase-core</artifactId>
       <version>3.0.7</version>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>com.mattbertolini</groupId>
       <artifactId>liquibase-slf4j</artifactId>
       <version>1.2.1</version>
@@ -72,7 +72,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.5</version>
     </dependency>
-
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
 	<!-- tests -->
 	<dependency>
 		<groupId>commons-io</groupId>
@@ -102,14 +106,6 @@
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
-
-    <!-- otherwise tomcat fails -->
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -133,10 +129,6 @@
           <configuration>
             <container>
               <dependencies>
-                <dependency>
-                  <groupId>log4j</groupId>
-                  <artifactId>log4j</artifactId>
-                </dependency>
                 <dependency>
                   <groupId>com.h2database</groupId>
                   <artifactId>h2</artifactId>
@@ -282,14 +274,6 @@
 	                <!-- wildfly 8 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
 	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
 	              </properties>
-					<home>${project.build.directory}/cargo/wildfly8x</home>
-					<files>
-						<file>
-							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
-							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
-							<todir>../installs/wildfly-8.0.0.Beta1/wildfly-8.0.0.Beta1/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
-						</file>
-					</files>
 				</configuration>
             </configuration>
           </plugin>
@@ -317,14 +301,17 @@
                 <containerId>jboss71x</containerId>
                 <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+
                 <zipUrlInstaller>
                 	<url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</url>
                 </zipUrlInstaller>
-                <!-- <artifactInstaller>
+						<!-- 
+                <artifactInstaller>
                 	<groupId>org.jboss.as</groupId>
                 	<artifactId>jboss-as-dist</artifactId>
                 	<version>7.1.1.Final</version>
-               	</artifactInstaller> -->
+               	</artifactInstaller> 
+                -->
               </container>
               <configuration>
 	              <properties>
@@ -332,21 +319,6 @@
 	                <!-- jboss 7.1 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
 	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
 	              </properties>
-					<home>${project.build.directory}/cargo/jboss71x</home>
-					<files>
-						<!-- path if using artifactInstaller -->
-						<file>
-							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
-							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
-							<todir>../installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
-						</file>
-						<!-- path if using zipUrlInstaller -->
-						<file>
-							<!-- the problem with modules is that by default dependencies to driver + log4j are missing => added -->
-							<file>${project.basedir}/src/main/config/jboss71x/cargo/installs/jboss-as-dist-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main/module.xml</file>
-							<todir>../installs/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final/modules/org/codehaus/cargo/classpath/p6spy-2-0-0-SNAPSHOT/main</todir>
-						</file>
-					</files>
 				</configuration>
             </configuration>
           </plugin>
