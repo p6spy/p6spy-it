@@ -62,7 +62,7 @@
       <artifactId>liquibase-core</artifactId>
       <version>3.0.7</version>
     </dependency>
-    <dependency>
+     <dependency>
       <groupId>com.mattbertolini</groupId>
       <artifactId>liquibase-slf4j</artifactId>
       <version>1.2.1</version>
@@ -72,7 +72,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.5</version>
     </dependency>
-
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
 	<!-- tests -->
 	<dependency>
 		<groupId>commons-io</groupId>
@@ -102,14 +106,6 @@
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
-
-    <!-- otherwise tomcat fails -->
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-      <scope>provided</scope>
-    </dependency>
   </dependencies>
 
   <build>
@@ -134,10 +130,6 @@
             <container>
               <dependencies>
                 <dependency>
-                  <groupId>log4j</groupId>
-                  <artifactId>log4j</artifactId>
-                </dependency>
-                <dependency>
                   <groupId>com.h2database</groupId>
                   <artifactId>h2</artifactId>
                 </dependency>
@@ -158,7 +150,7 @@
             <configuration>
               <properties>
                 <!-- p6spy understands system properties -->
-                 <cargo.jvmargs>${cargo.jvmargs.common}</cargo.jvmargs> 
+                <cargo.jvmargs>${cargo.jvmargs.common}</cargo.jvmargs> 
 				<cargo.servlet.port>8080</cargo.servlet.port>
 
                 <!-- just temporary, to prove things work at all with h2 -->
@@ -257,6 +249,13 @@
   <profiles>
     <profile>
       <id>wildfly-8.x</id>
+<!-- jboss of this version needs this for correct Datasource mapping -->
+	  <properties>
+		<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+		</web.xml.resource-ref.mapped-name>
+	  </properties>      
       <build>
         <plugins>
           <plugin>
@@ -269,6 +268,13 @@
                   <url>http://download.jboss.org/wildfly/8.0.0.Beta1/wildfly-8.0.0.Beta1.zip</url>
                 </zipUrlInstaller>
               </container>
+              <configuration>
+	              <properties>
+	                <!-- p6spy understands system properties -->
+	                <!-- wildfly 8 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+	              </properties>
+				</configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -277,7 +283,15 @@
     
     <profile>
       <id>jboss-7.1.x</id>
-      <build>
+	  <!-- jboss of this version needs this for correct Datasource mapping -->
+	  <properties>
+		<web.xml.resource-ref.mapped-name><![CDATA[
+<mapped-name>java:/jdbc/p6spy</mapped-name> 	
+]]>
+		</web.xml.resource-ref.mapped-name>
+	  </properties>
+
+	  <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
@@ -285,12 +299,27 @@
             <configuration>
               <container>
                 <containerId>jboss71x</containerId>
+                <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+
+                <zipUrlInstaller>
+                	<url>http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip</url>
+                </zipUrlInstaller>
+						<!-- 
                 <artifactInstaller>
                 	<groupId>org.jboss.as</groupId>
                 	<artifactId>jboss-as-dist</artifactId>
                 	<version>7.1.1.Final</version>
-               	</artifactInstaller>
+               	</artifactInstaller> 
+                -->
               </container>
+              <configuration>
+	              <properties>
+	                <!-- p6spy understands system properties -->
+	                <!-- jboss 7.1 specifics, see: https://github.com/p6spy/p6spy/issues/175 -->
+	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
+	              </properties>
+				</configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -318,12 +347,14 @@
 						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
 						<zipUrlInstaller>
 		                  <url>http://download.jboss.org/jbossas/6.1/jboss-as-distribution-6.1.0.Final.zip</url>
-		                </zipUrlInstaller>
-						<!-- <artifactInstaller>
+		                </zipUrlInstaller> 
+						<!-- 
+						<artifactInstaller>
 							<groupId>org.jboss.jbossas</groupId>
 							<artifactId>jboss-as-distribution</artifactId>
 							<version>6.1.0.Final</version>
-						</artifactInstaller> -->
+						</artifactInstaller>
+						-->
 					</container>
 					<configuration>
 						<home>${project.build.directory}/cargo/configurations/jboss61x</home>
@@ -334,7 +365,6 @@
 							</configfile>
 						</configfiles>
 					</configuration>
-
 				</configuration>
 			</plugin>
 		</plugins>
@@ -373,16 +403,35 @@
       <build>
         <plugins>
           <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>${basedir}/src/main/webapp-jboss-4.2.x</directory>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
+      
+          <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
               <container>
                 <containerId>jboss42x</containerId>
+                <!-- workarounding: https://github.com/p6spy/p6spy/issues/181
+						Maven central repo: Return code is: 503 , ReasonPhrase:backend read error -->
+                <zipUrlInstaller>
+					<url>http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip?r=http%3A%2F%2Fsourceforge.net%2Fprojects%2Fjboss%2Ffiles%2FJBoss%2FJBoss-4.2.3.GA&amp;2F&amp;ts=1386624449&amp;use_mirror=surfnet</url>
+				</zipUrlInstaller>
+                <!-- 
                 <artifactInstaller>
                 	<groupId>org.jboss.jbossas</groupId>
 					<artifactId>jboss-as-dist</artifactId>
 					<version>4.2.3.GA</version>
                	</artifactInstaller>
+               	 -->
               </container>
             </configuration>
           </plugin>
@@ -423,7 +472,7 @@
               </container>
               <configuration>
 	              <properties>
-	              	<!-- as glassfish 4 compplains about not present (__default) one, 
+	              	<!-- as glassfish 4 complains about not present (__default) one, 
 	              		see: https://s3.amazonaws.com/archive.travis-ci.org/jobs/14888766/log.txt -->
 	                <cargo.datasource.datasource.__default>
 	                  cargo.datasource.driver=org.h2.Driver|
