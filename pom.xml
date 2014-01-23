@@ -125,7 +125,7 @@
         <plugin>
           <groupId>org.codehaus.cargo</groupId>
           <artifactId>cargo-maven2-plugin</artifactId>
-          <version>1.4.6-SNAPSHOT</version>
+          <version>1.4.6</version>
           <configuration>
             <container>
               <dependencies>
@@ -265,7 +265,7 @@
               <container>
                 <containerId>wildfly8x</containerId>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.0.0.Beta1/wildfly-8.0.0.Beta1.zip</url>
+                  <url>http://download.jboss.org/wildfly/8.0.0.CR1/wildfly-8.0.0.CR1.tar.gz</url>
                 </zipUrlInstaller>
               </container>
               <configuration>
