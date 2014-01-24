@@ -21,7 +21,7 @@
   </description>
 
   <properties>
-    <spring-version>3.2.4.RELEASE</spring-version>
+    <spring-version>4.0.0.RELEASE</spring-version>
     <java-build>1.6</java-build>
 	<cargo.jvmargs.common>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
 	-Dp6spy.config.logfile=${project.build.directory}/spy.log
