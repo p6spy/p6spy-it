@@ -515,6 +515,69 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+      <id>glassfish-3.x-ds</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.cargo</groupId>
+            <artifactId>cargo-maven2-plugin</artifactId>
+            <executions>
+            	 <!-- redeploy instead of deploy, to make glassfish happy -->
+            	 <execution>
+			        <id>start-container</id>
+			        <phase>none</phase>
+			     </execution>
+	             <execution>
+	              <id>start-container-gf</id>
+	              <phase>pre-integration-test</phase>
+	              <goals>
+	                <goal>start</goal>
+	                <goal>redeploy</goal>
+	              </goals>
+	            </execution>
+           	</executions>
+            <configuration>
+              <container>
+                <containerId>glassfish3x</containerId>
+                <artifactInstaller>
+                	<groupId>org.glassfish.main.distributions</groupId>
+                	<artifactId>glassfish</artifactId>
+                	<version>3.1.2.2</version>
+               	</artifactInstaller>
+              </container>
+              <configuration>
+	            <properties>
+	                <!-- p6spy understands system properties 
+	                TODO: get rid of: -Dp6spy.config.realdatasource once cargo can pass it in DS definition -->
+	                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.realdatasource=jdbc/realds</cargo.jvmargs>
+				
+		            <!-- overriding the default one, as we want to go for the javax.sql.DataSource way -->
+	                <cargo.datasource.datasource.p6spy>
+	              	  cargo.datasource.type=javax.sql.DataSource
+	                  cargo.datasource.driver=com.p6spy.engine.spy.P6DataSource|
+	                  cargo.datasource.url=jdbc:h2:mem:p6spy|
+	                  cargo.datasource.jndi=jdbc/p6spy|
+	                  cargo.datasource.username=sa|
+	                  cargo.datasource.password=sa|
+	                  cargo.datasource.realdatasource=jdbc/realds
+	                </cargo.datasource.datasource.p6spy> 
+	                
+	                <cargo.datasource.datasource.realds>
+	              	  cargo.datasource.type=javax.sql.DataSource
+	                  cargo.datasource.driver=org.h2.jdbcx.JdbcDataSource|
+	                  cargo.datasource.url=jdbc:h2:mem:p6spy|
+	                  cargo.datasource.jndi=jdbc/realds|
+	                  cargo.datasource.username=sa|
+	                  cargo.datasource.password=sa
+	                </cargo.datasource.datasource.realds>
+	              </properties>
+	            </configuration>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
     
     <profile>
       <id>jetty-9.x</id>
@@ -739,16 +802,16 @@
 								see: http://stackoverflow.com/questions/10956676/if-i-specify-a-system-property-multiple-times-when-invoking-jvm-which-value-is-u -->
 							<cargo.jvmargs>${cargo.jvmargs.common}
 								-Dspring.profiles.active=jonas</cargo.jvmargs>
+								
+							<!-- jonas has trouble with default jndi ('/' might be problematic) -->
+			                <cargo.datasource.datasource.p6spy_jonas>
+			                  cargo.datasource.driver=com.p6spy.engine.spy.P6SpyDriver|
+			                  cargo.datasource.url=jdbc:p6spy:h2:mem:p6spy|
+			                  cargo.datasource.jndi=jdbc_p6spy|
+			                  cargo.datasource.username=sa|
+			                  cargo.datasource.password=sa
+			                </cargo.datasource.datasource.p6spy_jonas>
 						</properties>
-						
-						<!-- jonas has trouble with default jndi ('/' might be problematic) -->
-		                <cargo.datasource.datasource.p6spy_jonas>
-		                  cargo.datasource.driver=com.p6spy.engine.spy.P6SpyDriver|
-		                  cargo.datasource.url=jdbc:p6spy:h2:mem:p6spy|
-		                  cargo.datasource.jndi=jdbc_p6spy|
-		                  cargo.datasource.username=sa|
-		                  cargo.datasource.password=sa
-		                </cargo.datasource.datasource.p6spy_jonas>
 					</configuration>
 				</configuration>
 			</plugin>
