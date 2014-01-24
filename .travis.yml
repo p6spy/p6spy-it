@@ -12,6 +12,7 @@ env:
     - AS=jboss-4.2.x
     - AS=glassfish-4.x
     - AS=glassfish-3.x
+    - AS=glassfish-3.x-ds
     - AS=jetty-9.x
     - AS=jetty-8.x
     - AS=jetty-7.x
