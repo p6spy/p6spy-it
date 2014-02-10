@@ -26,9 +26,10 @@
 	<cargo.jvmargs.common>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
 	-Dp6spy.config.logfile=${project.build.directory}/spy.log
 	-Dspring.profiles.active=common
+
 	</cargo.jvmargs.common>
 <!-- 
--Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=123456,server=y,suspend=y
+-Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=12345,server=y,suspend=y
 	
  -->
  	<!-- only specific web servers require this one, so empty in common -->
@@ -125,7 +126,7 @@
         <plugin>
           <groupId>org.codehaus.cargo</groupId>
           <artifactId>cargo-maven2-plugin</artifactId>
-          <version>1.4.6</version>
+          <version>1.4.7</version>
           <configuration>
             <container>
               <dependencies>
@@ -461,19 +462,6 @@
                 	<version>4.0</version>
                	</artifactInstaller>
               </container>
-              <configuration>
-	              <properties>
-	              	<!-- as glassfish 4 complains about not present (__default) one, 
-	              		see: https://s3.amazonaws.com/archive.travis-ci.org/jobs/14888766/log.txt -->
-	                <cargo.datasource.datasource.__default>
-	                  cargo.datasource.driver=org.h2.Driver|
-	                  cargo.datasource.url=jdbc:h2:mem:foo|
-	                  cargo.datasource.jndi=jdbc/__default|
-	                  cargo.datasource.username=sa|
-	                  cargo.datasource.password=sa
-	                </cargo.datasource.datasource.__default>
-	              </properties>
-	           </configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -535,16 +523,6 @@
 	                  cargo.datasource.username=sa|
 	                  cargo.datasource.password=sa
 	                </cargo.datasource.datasource.realds>
-	                
-	                <!-- as glassfish 4 complains about not present (__default) one, 
-	              		see: https://s3.amazonaws.com/archive.travis-ci.org/jobs/14888766/log.txt -->
-	                <cargo.datasource.datasource.__default>
-	                  cargo.datasource.driver=org.h2.Driver|
-	                  cargo.datasource.url=jdbc:h2:mem:foo|
-	                  cargo.datasource.jndi=jdbc/__default|
-	                  cargo.datasource.username=sa|
-	                  cargo.datasource.password=sa
-	                </cargo.datasource.datasource.__default>
 	              </properties>
 	            </configuration>
             </configuration>
@@ -673,7 +651,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>jetty-8.x</id>
       <build>
@@ -805,21 +783,30 @@
       </build>
     </profile>
     
-    <!-- TODO: missing url/maven repo to download from  -->
-    <!-- <profile>
-      <id>weblogic-12.x</id>
+	<!-- <profile>
+      <id>weblogic-12.1.x</id>
       <build>
         <plugins>
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
+            
               <container>
-                <containerId>weblogic12x</containerId>
+                <containerId>weblogic121x</containerId>
                 <zipUrlInstaller>
-                  <url>TODO</url>
+               	  <url>http://localhost:8000/wls1211_dev.zip</url>
+                  <url>${env.WL1211_URL}</url>
                 </zipUrlInstaller>
+                <home>/tmp/wls121x_dev</home>
               </container>
+              <configuration>
+				  <type>standalone</type>
+				  <home>/tmp/wls121x_dev/domain_p6spy</home>
+				  <properties>
+				  <cargo.weblogic.bea.home>/tmp/wls121x_dev</cargo.weblogic.bea.home>
+				  </properties>
+			</configuration>
             </configuration>
           </plugin>
         </plugins>
@@ -949,7 +936,7 @@
 						2014-01-23 21:41:26,793 WARN  [DependencyManager] Could not start bundle: org.h2_1.3.173 [316]
 						org.osgi.framework.BundleException: The bundle "org.h2_1.3.173 [316]" could not be resolved. Reason: Missing Constraint: Import-Package: org.osgi.service.jdbc; version="1.0.0"
 					-->
-	                <dependency>
+	              	<dependency>
 	                	<groupId>org.ow2.spec.osgi</groupId>
 				    	<artifactId>ow2-jdbc-service-1.0-spec</artifactId>
 				    </dependency>
