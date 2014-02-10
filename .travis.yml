@@ -20,7 +20,7 @@ env:
     - AS=tomcat-8.x
     - AS=tomcat-7.x
     - AS=tomcat-6.x
-    #- AS=weblogic-12.x
+    #- AS=weblogic-12.1.x
     - AS=resin-4.x
     - AS=jonas-5.x
     - AS=geronimo-3.x
