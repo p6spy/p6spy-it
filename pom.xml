@@ -643,7 +643,7 @@
                 <artifactInstaller>
                 	<groupId>org.eclipse.jetty</groupId>
                 	<artifactId>jetty-distribution</artifactId>
-                	<version>9.1.0.v20131115</version>
+                	<version>9.1.1.v20140108</version>
                	</artifactInstaller>
               </container>
             </configuration>
@@ -716,7 +716,7 @@
                 <artifactInstaller>
                   <groupId>org.apache.tomcat</groupId>
                   <artifactId>tomcat</artifactId>
-                  <version>8.0.0-RC10</version>
+                  <version>8.0.1</version>
                   <type>zip</type>
                 </artifactInstaller>
               </container>
@@ -774,7 +774,7 @@
               <container>
                 <containerId>tomcat6x</containerId>
                 <zipUrlInstaller>
-                  <url>http://apache.imsam.info/tomcat/tomcat-6/v6.0.37/bin/apache-tomcat-6.0.37.zip</url>
+                  <url>http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.39/bin/apache-tomcat-6.0.39.tar.gz</url>
                 </zipUrlInstaller>
               </container>
             </configuration>
