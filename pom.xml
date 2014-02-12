@@ -26,7 +26,6 @@
 	<cargo.jvmargs.common>-Dp6spy.config.modulelist=com.p6spy.engine.logging.P6LogFactory
 	-Dp6spy.config.logfile=${project.build.directory}/spy.log
 	-Dspring.profiles.active=common
-
 	</cargo.jvmargs.common>
 <!-- 
 -Xdebug -Xnoagent -Djava.compiler=NONE -Xrunjdwp:transport=dt_socket,address=12345,server=y,suspend=y
@@ -257,7 +256,7 @@
               <container>
                 <containerId>wildfly8x</containerId>
                 <zipUrlInstaller>
-                  <url>http://download.jboss.org/wildfly/8.0.0.CR1/wildfly-8.0.0.CR1.tar.gz</url>
+                  <url>http://download.jboss.org/wildfly/8.0.0.Final/wildfly-8.0.0.Final.tar.gz</url>
                 </zipUrlInstaller>
               </container>
               <configuration>
