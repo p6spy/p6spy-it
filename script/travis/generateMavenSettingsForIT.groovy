@@ -9,7 +9,7 @@ if( !originalSettingsFile.exists() ) {
 def settings = new XmlParser().parse(originalSettingsFile);
 println "Maven settings loaded from ${originalSettingsFile.absolutePath}"
 
-// add cloudbees repositories
+// add profiles for repositories
 def profiles = settings.profiles
 if( profiles.size() == 0 ) {
   // create the node if it did not exist
@@ -17,17 +17,20 @@ if( profiles.size() == 0 ) {
   profiles = settings.profiles
 }
 
-println "Appending profile for cloudbees repositories"
+println "Appending profile for p6spy-it-mvnrepo"
 profiles[0].append(NodeBuilder.newInstance().profile {
-  id('cloudbees')
+  id('p6spy-it-mvnrepo')
   repositories {
     repository {
-      id('cloudbees-release')
+      id('p6spy-it-mvnrepo')
       snapshots {
-        enabled('false')
+        enabled('true')
       }
-      name('cloudbees-release')
-      url('http://repository-p6spy.forge.cloudbees.com/release')
+      releases {
+        enabled('true')
+      }
+      name('p6spy-it-mvnrepo')
+      url('https://github.com/p6spy/p6spy-it-mvnrepo/blob/master')
     }
   }
 })
@@ -70,7 +73,7 @@ if( activeProfiles.size() == 0 ) {
   activeProfiles = settings.activeProfiles
 }
 
-activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('cloudbees'))
+activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('p6spy-it-mvnrepo'))
 activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('codehaus-snapshots'))
 
 // write out new settings.xml file
