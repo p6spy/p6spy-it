@@ -23,7 +23,8 @@ env:
     #- AS=weblogic-12.1.x
     - AS=resin-4.x
     - AS=jonas-5.x
-    - AS=geronimo-3.x
+    # disabling geronimo-3.x - see  https://github.com/p6spy/p6spy/issues/189
+    #- AS=geronimo-3.x
     - AS=geronimo-2.2.x
     - AS=geronimo-2.1.x
     
