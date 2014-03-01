@@ -40,5 +40,5 @@ install: mvn -B dependency:resolve dependency:resolve-plugins --settings ~/.m2/i
 script: mvn -version; mvn clean -B verify -P ${AS} --settings ~/.m2/itSettings.xml
 
 notifications:
- email: false
-#   - p6spy-developers@googlegroups.com
+ email:
+   - p6spy-developers@googlegroups.com
