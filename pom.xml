@@ -122,7 +122,7 @@
         </configuration>
       </plugin>
       
-        <plugin>
+        <!-- <plugin>
           <groupId>org.codehaus.cargo</groupId>
           <artifactId>cargo-maven2-plugin</artifactId>
           <version>1.4.7</version>
@@ -149,18 +149,18 @@
             </deployables>
             <configuration>
               <properties>
-                <!-- p6spy understands system properties -->
+                p6spy understands system properties
                 <cargo.jvmargs>${cargo.jvmargs.common}</cargo.jvmargs> 
 				<cargo.servlet.port>8080</cargo.servlet.port>
 
-                <!-- just temporary, to prove things work at all with h2 -->
-                <!-- <cargo.datasource.datasource.h2>
+                just temporary, to prove things work at all with h2
+                <cargo.datasource.datasource.h2>
                   cargo.datasource.driver=org.h2.Driver|
                   cargo.datasource.url=jdbc:h2:mem:foo|
                   cargo.datasource.jndi=jdbc/h2|
                   cargo.datasource.username=sa|
                   cargo.datasource.password=sa
-                </cargo.datasource.datasource.h2> -->
+                </cargo.datasource.datasource.h2>
 
                  <cargo.datasource.datasource.p6spy>
                   cargo.datasource.driver=com.p6spy.engine.spy.P6SpyDriver|
@@ -190,7 +190,7 @@
             </execution>
            </executions>
         </plugin>
-
+ -->
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-failsafe-plugin</artifactId>
@@ -889,64 +889,110 @@
 		    <scope>provided</scope>
 		</dependency>
       </dependencies>
+      
+      <properties>
+ <options>p6spy-driver</options></properties>
+ 
+ 
       <build>
         <plugins>
+<!--         	<plugin>
+				<groupId>org.codehaus.cargo</groupId>
+				<artifactId>cargo-maven2-plugin</artifactId>
+				<executions>
+					no need to deploy again for geronimo
+					<execution>
+						<id>start-container</id>
+						<phase>none</phase>
+					</execution>
+					<execution>
+						<id>stop-container</id>
+						<phase>none</phase>
+					</execution>
+				</executions>
+			</plugin>
+ -->
+ 
+ 			<plugin>
+    <groupId>org.apache.geronimo.buildsupport</groupId>
+    <artifactId>geronimo-maven-plugin</artifactId>
+    <version>3.0.1</version>
+    <!-- <dependencies>
+    <dependency>
+    <groupId>org.apache.maven.surefire</groupId><artifactId>surefire-api</artifactId><version>2.3</version>
+    </dependency></dependencies> -->
+    <configuration>
+        <assemblies>
+            <assembly>
+                <groupId>org.apache.geronimo.assemblies</groupId>
+                  <artifactId>geronimo-tomcat7-javaee6-web</artifactId>
+                  <version>3.0.1</version>
+                  <classifier>bin</classifier>
+                  <type>zip</type>
+            </assembly>
+        </assemblies>
+        
+        <optionSets>
+            <optionSet>
+                <id>p6spy-driver</id>
+                <options>
+                    <option>${cargo.jvmargs.common}</option>
+                    <option>-Dp6spy.config.driverlist=org.h2.Driver</option>
+                </options>
+            </optionSet>
+            </optionSets>
+    </configuration>
+    <executions>
+					<execution>
+						<id>start-geronimo</id>
+              <phase>pre-integration-test</phase>
+              <goals>
+                <goal>start</goal>
+                <goal>wait-for-server</goal>
+              </goals>
+              <configuration>
+                <background>true</background>
+            </configuration>
+            </execution>
+             <execution>
+              <id>stop-geronimo</id>
+              <phase>post-integration-test</phase>
+              <goals>
+                <goal>stop</goal>
+              </goals>
+            </execution>
+           </executions>
+
+</plugin>
+			
+			<plugin>
+  <artifactId>exec-maven-plugin</artifactId>
+  <groupId>org.codehaus.mojo</groupId>
+  <executions>
+    <execution>
+      <phase>pre-integration-test</phase>
+      <goals>
+        <goal>exec</goal>
+      </goals>
+      <configuration>
+        <executable>${basedir}/script/geronimo/geronimo-deploy.sh</executable>
+      </configuration>
+    </execution>
+  </executions>
+</plugin>
+         	
+         <!-- prevent cargo completely -->
           <plugin>
             <groupId>org.codehaus.cargo</groupId>
             <artifactId>cargo-maven2-plugin</artifactId>
             <configuration>
               <executions>
-            	 <!-- no need to deploy again for geronimo -->
             	 <execution>
-			        <id>start-container</id>
 			        <phase>none</phase>
-			     </execution>
-	             <execution>
-	              <id>start-container-gf</id>
-	              <phase>pre-integration-test</phase>
-	              <goals>
-	                <goal>start</goal>
-	              </goals>
 	            </execution>
            	  </executions>
-              <configuration>
-               <properties>
-                <!-- p6spy understands system properties -->
-                <!-- geromino specifics, similar to tomcat one -->
-                <cargo.jvmargs>${cargo.jvmargs.common} -Dp6spy.config.driverlist=org.h2.Driver</cargo.jvmargs>
-		       </properties>
-			  </configuration>
-              <container>
-                <containerId>geronimo3x</containerId>
-                <artifactInstaller>
-                  <groupId>org.apache.geronimo.assemblies</groupId>
-                  <artifactId>geronimo-tomcat7-javaee6-web</artifactId>
-                  <version>3.0.1</version>
-                  <classifier>bin</classifier>
-                  <type>tar.gz</type>
-                </artifactInstaller>
-                
-	              <dependencies>
-	                <dependency>
-	                  <groupId>com.h2database</groupId>
-	                  <artifactId>h2</artifactId>
-	                </dependency>
-	                <!-- Geronimo has some trouble with h2 DB and it's OSGI dependencies => this is required to prevent:
-						2014-01-23 21:41:26,793 WARN  [DependencyManager] Could not start bundle: org.h2_1.3.173 [316]
-						org.osgi.framework.BundleException: The bundle "org.h2_1.3.173 [316]" could not be resolved. Reason: Missing Constraint: Import-Package: org.osgi.service.jdbc; version="1.0.0"
-					-->
-	              	<dependency>
-	                	<groupId>org.ow2.spec.osgi</groupId>
-				    	<artifactId>ow2-jdbc-service-1.0-spec</artifactId>
-				    </dependency>
-	                <dependency>
-	                  <groupId>p6spy</groupId>
-	                  <artifactId>p6spy</artifactId>
-	                </dependency>
-	              </dependencies>
-              </container>
-            </configuration>
-          </plugin>
+	</configuration>
+	</plugin>
         </plugins>
       </build>
     </profile>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<connector xmlns="http://geronimo.apache.org/xml/ns/j2ee/connector-1.2">
+  <dep:environment xmlns:dep="http://geronimo.apache.org/xml/ns/deployment-1.2">
+    <dep:moduleId>
+      <dep:groupId>org.codehaus.cargo.datasource</dep:groupId>
+      <dep:artifactId>p6spy</dep:artifactId>
+      <dep:version>1.0</dep:version>
+      <dep:type>car</dep:type>
+    </dep:moduleId>
+    <dep:dependencies>
+      <dep:dependency>
+        <dep:groupId>org.codehaus.cargo.classpath</dep:groupId>
+        <dep:artifactId>org.ow2.spec.osgi.ow2-jdbc-service-1.0-spec</dep:artifactId>
+        <dep:version>1.0.13</dep:version>
+        <dep:type>jar</dep:type>
+      </dep:dependency>
+      <dep:dependency>
+        <dep:groupId>org.codehaus.cargo.classpath</dep:groupId>
+        <dep:artifactId>org.h2</dep:artifactId>
+        <dep:version>1.3.173</dep:version>
+        <dep:type>jar</dep:type>
+      </dep:dependency>
+      <dep:dependency>
+        <dep:groupId>org.codehaus.cargo.classpath</dep:groupId>
+        <dep:artifactId>p6spy</dep:artifactId>
+        <dep:version>2.0.0-SNAPSHOT</dep:version>
+        <dep:type>jar</dep:type>
+      </dep:dependency>
+    </dep:dependencies>
+  </dep:environment>
+  <resourceadapter>
+    <outbound-resourceadapter>
+      <connection-definition>
+        <connectionfactory-interface>javax.sql.DataSource</connectionfactory-interface>
+        <connectiondefinition-instance>
+          <name>jdbc/p6spy</name>
+          <config-property-setting name="Driver">com.p6spy.engine.spy.P6SpyDriver</config-property-setting>
+          <config-property-setting name="Password">sa</config-property-setting>
+          <config-property-setting name="UserName">sa</config-property-setting>
+          <config-property-setting name="ConnectionURL">jdbc:p6spy:h2:mem:p6spy</config-property-setting>
+          <connectionmanager>
+            <no-transaction/>
+            <single-pool>
+              <max-size>10</max-size>
+              <min-size>0</min-size>
+              <match-one/>
+            </single-pool>
+          </connectionmanager>
+        </connectiondefinition-instance>
+      </connection-definition>
+    </outbound-resourceadapter>
+  </resourceadapter>
+</connector>
