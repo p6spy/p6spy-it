@@ -101,8 +101,7 @@
     <dependency>
       <groupId>p6spy</groupId>
       <artifactId>p6spy</artifactId>
-      <!-- workaround: 2.0-SNAPSHOT is considered later than 2.0.0-SNAPSHOT => LATEST doesn't work here -->
-      <version>2.0.0-SNAPSHOT</version>
+      <version>LATEST</version>
       <type>jar</type>
       <scope>provided</scope>
     </dependency>
