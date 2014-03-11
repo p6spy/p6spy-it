@@ -20,6 +20,9 @@ if( profiles.size() == 0 ) {
 println "Appending profile for p6spy-it-mvnrepo"
 profiles[0].append(NodeBuilder.newInstance().profile {
   id('p6spy-it-mvnrepo')
+  activation {
+    activeByDefault(true)
+  }
   repositories {
     repository {
       id('p6spy-it-mvnrepo')
@@ -30,7 +33,7 @@ profiles[0].append(NodeBuilder.newInstance().profile {
         enabled('true')
       }
       name('p6spy-it-mvnrepo')
-      url('https://github.com/p6spy/p6spy-it-mvnrepo/blob/master')
+      url('https://github.com/p6spy/p6spy-it-mvnrepo/raw/master')
     }
   }
 })
@@ -38,6 +41,9 @@ profiles[0].append(NodeBuilder.newInstance().profile {
 println "Appending profile for codehaus snapshots repository"
 profiles[0].append(NodeBuilder.newInstance().profile {
   id('codehaus-snapshots')
+  activation {
+    activeByDefault(true)
+  }
   repositories {
     repository {
       id('codehaus-snapshots')
@@ -65,16 +71,6 @@ profiles[0].append(NodeBuilder.newInstance().profile {
     }
   }
 })
-
-def activeProfiles = settings.activeProfiles
-if( activeProfiles.size() == 0 ) {
-  // create the node if it did not exist
-  settings.append(new NodeBuilder().createNode("activeProfiles"))
-  activeProfiles = settings.activeProfiles
-}
-
-activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('p6spy-it-mvnrepo'))
-activeProfiles[0].append(NodeBuilder.newInstance().activeProfile('codehaus-snapshots'))
 
 // write out new settings.xml file
 def targetFile = new File(originalSettingsFile.parentFile, 'itSettings.xml')
