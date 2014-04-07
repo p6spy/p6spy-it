@@ -7,6 +7,7 @@ env:
   matrix:
     - AS=wildfly-8.x
     - AS=jboss-7.1.x
+    - AS=jboss-7.1.x-xads
     - AS=jboss-6.1.x
     - AS=jboss-5.1.x
     - AS=jboss-4.2.x
