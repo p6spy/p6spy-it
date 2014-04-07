@@ -102,20 +102,23 @@
 				    <driver>h2</driver>
                 </xa-datasource>
 				<!-- p6spy datasource -->
-				<xa-datasource jndi-name="java:/jdbc/p6spy" pool-name="java:/jdbc/p6spy">
-					<!-- just to prevent: failure description: "JBAS010469: At least one xa-datasource-property is required for an xa-datasource" --> 
+				<!-- doesn't work, as we can't convert and the: org.jboss.as.connector.adapters.jdbc.WrapperDataSource 
+				(http://grepcode.com/file/repo1.maven.org/maven2/org.jboss.as/jboss-as-connector/7.0.0.Beta1/org/jboss/as/connector/adapters/jdbc/WrapperDataSource.java#WrapperDataSource)
+				used by JBoss to XADataSource -->
+				<!-- <xa-datasource jndi-name="java:/jdbc/p6spy" pool-name="java:/jdbc/p6spy">
+					just to prevent: failure description: "JBAS010469: At least one xa-datasource-property is required for an xa-datasource" 
 					<xa-datasource-property name="realDataSource">java:/jdbc/p6spyReal</xa-datasource-property>
                     <driver>p6spy</driver>
-                </xa-datasource>
-                <!-- <datasource jndi-name="java:/jdbc/p6spy" pool-name="java:/jdbc/p6spy">
-					<!- - just to prevent: failure description: "JBAS014746: connection-url may not be null" - ->
-					<connection-url>jdbc:h2:mem:dummy</connection-url>
+                </xa-datasource> -->
+                <datasource jndi-name="java:/jdbc/p6spy" pool-name="java:/jdbc/p6spy">
+					<!-- just to prevent: failure description: "JBAS014746: connection-url may not be null" -->
+					<connection-url>jdbc:p6spy:h2:non-existing-host-name/tmp</connection-url>
                     <driver>p6spy</driver>
-                </datasource> -->
+                </datasource>
 
                 <drivers>
                     <driver name="p6spy" module="org.codehaus.cargo.classpath.p6spy-2-0-3-SNAPSHOT">
-                        <xa-datasource-class>com.p6spy.engine.spy.P6DataSource</xa-datasource-class>
+                        <datasource-class>com.p6spy.engine.spy.P6DataSource</datasource-class>
                     </driver>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
