@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-web-app PUBLIC "-//GlassFish.org//DTD GlassFish Application Server 3.1 Servlet 3.0//EN" "http://glassfish.org/dtds/glassfish-web-app_3_0-1.dtd">
+<glassfish-web-app>
+  <context-root>project</context-root>
+
+  <resource-ref>
+    <res-ref-name>jdbc/p6SpyXADataSourceS1</res-ref-name>
+    <jndi-name>jdbc/p6SpyXADataSourceS1</jndi-name>
+  </resource-ref>
+  
+  <resource-ref>
+    <res-ref-name>jdbc/h2XADataSourceS2</res-ref-name>
+    <jndi-name>jdbc/h2XADataSourceS2</jndi-name>
+  </resource-ref>
+  
+  <class-loader delegate="true"/>
+</glassfish-web-app>

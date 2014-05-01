@@ -1,0 +1,71 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+configurations {
+  wildfly81xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+  wildfly81xTestRuntime "org.wildfly:wildfly-arquillian-container-remote:$libraryVersions.arquillian_wildfly81"
+}
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/wildfly"
+String binDir = rootDir + "/bin"
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/wildfly-8.1.0.CR1', dest: 'build/unpack/wildfly')
+  }
+}
+
+// wildfly has already the h2 available => don't deploy again
+//task deployH2Jar(type: Copy, dependsOn: unpackContainer) {
+//  from configurations.p6spyAll
+//  into rootDir + "/modules/system/layers/base/com/h2/main"
+//  include "**/h2*.jar"
+//}
+
+task deployP6SpyJar(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/modules/system/layers/base/com/p6spy/main"
+  include "**/p6spy*.jar"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into rootDir + "/bin"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task configureDS(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/wildfly81x"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath(), p6spy_version: libraryVersions.p6spy, h2_version: libraryVersions.h2])
+}
+
+task startContainer(dependsOn: [ deployP6SpyJar, copyConfig, configureDS ]) {
+  doLast {
+    ant.exec(
+      dir: binDir,
+      spawn: true,
+      executable: 'standalone.sh'
+    )
+
+    // wildfly might not need it due to fast boot
+    // it takes quite some time till jboss boots, let's make sure we wait for it
+    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+      socket (server: "localhost", port: "8080")
+    }
+  }
+}
+
+task stopContainer(type:Exec, dependsOn: startContainer) {
+  workingDir binDir
+  commandLine 'jboss-cli.sh', '-c', '--command=shutdown' 
+}

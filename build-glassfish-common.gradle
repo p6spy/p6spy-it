@@ -1,0 +1,124 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+String rootDir = "$buildDir/unpack/glassfish"
+String binDir = rootDir + "/glassfish/bin"
+
+task deployJars(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/glassfish/domains/domain1/lib/ext"
+}
+
+task copyConfig(type: Copy, dependsOn: deployJars) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into rootDir + "/glassfish/domains/domain1/config"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task startContainer(type:Exec, dependsOn: copyConfig) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'start-domain', '--debug=true'
+}
+
+//
+// h2 pools
+//
+task createH2ConnectionPoolDataSourceS1Pool(type:Exec, dependsOn:startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--datasourceclassname=org.h2.jdbcx.JdbcDataSource', '--restype=javax.sql.ConnectionPoolDataSource', "--property=URL='jdbc:h2:tcp://localhost:9091/${buildDir}/h2/s1/test1':User=sa:Password=''", 'h2ConnectionPoolDataSourceS1Pool'
+}
+task createH2XADataSourceS1Pool(type:Exec, dependsOn:startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--datasourceclassname=org.h2.jdbcx.JdbcDataSource', '--restype=javax.sql.XADataSource', "--property=URL='jdbc:h2:tcp://localhost:9091/${buildDir}/h2/s1/test2':User=sa:Password=''", 'h2XADataSourceS1Pool'
+}
+task createH2XADataSourceS2Pool(type:Exec, dependsOn:startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--datasourceclassname=org.h2.jdbcx.JdbcDataSource', '--restype=javax.sql.XADataSource', "--property=URL='jdbc:h2:tcp://localhost:9092/${buildDir}/h2/s2/test1':User=sa:Password=''", 'h2XADataSourceS2Pool'
+}
+
+//
+// ping h2 pools
+//
+task pingH2ConnectionPoolDataSourceS1Pool(type:Exec, dependsOn:createH2ConnectionPoolDataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'h2ConnectionPoolDataSourceS1Pool'
+}
+task pingH2XADataSourceS1Pool(type:Exec, dependsOn:createH2XADataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'h2XADataSourceS1Pool'
+}
+task pingH2XADataSourceS2Pool(type:Exec, dependsOn:createH2XADataSourceS2Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'h2XADataSourceS2Pool'
+}
+
+//
+// h2 resources
+//
+task createH2ConnectionPoolDataSourceS1Resource(type:Exec, dependsOn:pingH2ConnectionPoolDataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', '--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties", 'create-jdbc-resource', '--connectionpoolid=h2ConnectionPoolDataSourceS1Pool', 'jdbc/h2ConnectionPoolDataSourceS1'
+}
+task createH2XADataSourceS1Resource(type:Exec, dependsOn:pingH2XADataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin','--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties", 'create-jdbc-resource', '--connectionpoolid=h2XADataSourceS1Pool', 'jdbc/h2XADataSourceS1'
+}
+task createH2XADataSourceS2Resource(type:Exec, dependsOn:pingH2XADataSourceS2Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', '--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties", 'create-jdbc-resource', '--connectionpoolid=h2XADataSourceS2Pool', 'jdbc/h2XADataSourceS2'
+}
+
+//
+// p6spy pools
+//
+task createP6SpyDriverS1Pool(type:Exec, dependsOn:startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--driverclassname=com.p6spy.engine.spy.P6SpyDriver', '--restype=java.sql.Driver', "--property=URL='jdbc:p6spy:h2:tcp://localhost:9091/${buildDir}/h2/s1/test3':User=sa:Password=''" /*'--property=URL="jdbc\\:p6spy\\:h2\\:tcp\\://localhost\\:9091/test1":User=sa:Password=""'*/, 'p6spyDriverS1Pool'
+}
+task createP6SpyConnectionPoolDataSourceS1Pool(type:Exec, dependsOn:createH2ConnectionPoolDataSourceS1Resource) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--datasourceclassname=com.p6spy.engine.spy.P6DataSource', '--restype=javax.sql.ConnectionPoolDataSource', '--property=realDataSource=jdbc/h2ConnectionPoolDataSourceS1:User=sa:Password=""', 'p6spyConnectionPoolDataSourceS1Pool'
+}
+task createP6SpyXADataSourceS1Pool(type:Exec, dependsOn:createH2XADataSourceS1Resource) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'create-jdbc-connection-pool', '--datasourceclassname=com.p6spy.engine.spy.P6DataSource', '--restype=javax.sql.XADataSource', '--property=realDataSource=jdbc/h2XADataSourceS1:User=sa:Password=""', 'p6spyXADataSourceS1Pool'
+}
+
+//
+// ping p6spy pools
+//
+task pingP6SpyDriverS1Pool(type:Exec, dependsOn:createP6SpyDriverS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'p6spyDriverS1Pool'
+}
+
+task pingP6SpyDataSourceS1Pool(type:Exec, dependsOn:createP6SpyConnectionPoolDataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'p6spyConnectionPoolDataSourceS1Pool'
+}
+task pingP6SpyXADataSourceS1Pool(type:Exec, dependsOn:createP6SpyXADataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'ping-connection-pool', 'p6spyXADataSourceS1Pool'
+}
+
+//
+// p6spy resources
+//
+task createP6SpyDriverS1Resource(type:Exec, dependsOn:pingP6SpyDriverS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', '--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties", 'create-jdbc-resource', '--connectionpoolid=p6spyDriverS1Pool', 'jdbc/p6SpyDriverS1'
+}
+task createP6SpyDataSourceS1Resource(type:Exec, dependsOn:pingP6SpyDataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', '--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties", 'create-jdbc-resource', '--connectionpoolid=p6spyConnectionPoolDataSourceS1Pool', 'jdbc/p6SpyConnectionPoolDataSourceS1'
+}
+task createP6SpyXADataSourceS1Resource(type:Exec, dependsOn:pingP6SpyXADataSourceS1Pool) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', '--user=admin', "--passwordfile=../../../../../src/test/config/glassfish_passwordfile.properties",  'create-jdbc-resource', '--connectionpoolid=p6spyXADataSourceS1Pool', 'jdbc/p6SpyXADataSourceS1'
+}
+
+task stopContainer(type:Exec, dependsOn: startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'asadmin', 'stop-domain'
+}
+
+startContainer.finalizedBy createP6SpyDriverS1Resource, createP6SpyDataSourceS1Resource, createP6SpyXADataSourceS1Resource, createH2XADataSourceS2Resource

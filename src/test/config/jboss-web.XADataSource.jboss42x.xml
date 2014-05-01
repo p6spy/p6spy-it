@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jboss-web>
+    <resource-ref>
+    	<res-ref-name>jdbc/p6SpyXADataSourceS1</res-ref-name>
+    	<res-type>javax.sql.DataSource</res-type>
+    	<jndi-name>java:/jdbc/p6SpyXADataSourceS1</jndi-name>
+    </resource-ref>
+</jboss-web>

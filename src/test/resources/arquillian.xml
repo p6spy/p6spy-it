@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<arquillian xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://jboss.org/schema/arquillian"
+	xsi:schemaLocation="http://jboss.org/schema/arquillian http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
+
+	<!-- Uncomment to have test archives exported to the file system for inspection -->
+	<engine>
+		<property name="deploymentExportPath">build/arquillian_unpack/</property>
+	</engine>
+	
+	<container qualifier="glassfish31x">
+		<configuration>
+			<property name="remoteServerAddress">localhost</property>
+			<property name="remoteServerHttpPort">8080</property>
+			<property name="remoteServerAdminPort">4848</property>
+		</configuration>
+	</container>
+
+	<container qualifier="glassfish4x">
+		<configuration>
+			<property name="remoteServerAddress">localhost</property>
+			<property name="remoteServerHttpPort">8080</property>
+			<property name="remoteServerAdminPort">4848</property>
+		</configuration>
+	</container>
+	
+	<container qualifier="wildfly81x">
+	<configuration></configuration>
+	</container>
+	
+
+	<container qualifier="jboss71x">
+		<configuration>
+            <property name="jbossHome">build/unpack/jboss</property>
+        </configuration>
+        <protocol type="jmx-as7">
+            <property name="executionType">REMOTE</property>
+        </protocol>
+	</container>
+
+	<container qualifier="jboss61x">
+		<configuration>
+		</configuration>
+	</container>
+
+	<container qualifier="jboss51x">
+		<!-- <configuration>
+			<property name="jbossHome">build/unpack/jboss</property>
+			<property name="httpPort">8080</property>
+			<property name="rmiPort">1099</property>
+			<property name="profileName">default</property>
+		</configuration> -->
+	</container>
+
+	<!-- managed -->
+	<container qualifier="jboss42x">
+		<configuration>
+			<property name="jbossHome">build/unpack/jboss</property>
+			<property name="httpPort">8080</property>
+			<property name="rmiPort">1099</property>
+			<property name="profileName">default</property>
+		</configuration>
+	</container>
+
+</arquillian>

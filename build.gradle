@@ -1,0 +1,264 @@
+import java.io.File;
+
+apply plugin: 'war'
+//version: '2.0.0-SNAPSHOT'
+
+repositories { 
+  mavenCentral() 
+  mavenLocal()
+  
+//  maven {
+//    // required by: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:2.2.0-alpha-1
+//    url 'http://repo.gradle.org/gradle/libs-releases-local'
+//    url 'http://repository.jboss.org/nexus/content/groups/public/'
+//    
+//    // required by jboss51x
+//    url 'https://repository.jboss.org/nexus/content/repositories/deprecated/'
+//    url 'https://repository.jboss.org/nexus/content/repositories/releases/'
+//    
+//    // p6spy snapshots
+//    url 'https://oss.sonatype.org/content/repositories/snapshots'
+//  }
+  
+  // required by: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:2.2.0-alpha-1
+  mavenRepo url: 'http://repo.gradle.org/gradle/libs-releases-local'
+  mavenRepo url: 'http://repository.jboss.org/nexus/content/groups/public/'
+  
+  // required by jboss51x
+  mavenRepo url: 'https://repository.jboss.org/nexus/content/repositories/deprecated/'
+  mavenRepo url: 'https://repository.jboss.org/nexus/content/repositories/releases/'
+  
+  // p6spy snapshots
+  mavenRepo url: 'https://oss.sonatype.org/content/repositories/snapshots'
+}
+
+def loadProperties(String sourceFileName) {
+  def config = new Properties()
+  def propFile = new File(sourceFileName)
+  if (propFile.canRead()) {
+      config.load(new FileInputStream(propFile))
+      for (Map.Entry property in config) {
+          ext[property.key] = property.value;
+      }
+  }
+}
+
+// workaround to propagate properties to nested gradle build (initiated via ShringWrap API)
+// see: https://issues.jboss.org/browse/SHRINKWRAP-482
+loadProperties 'build/nested_build.gradle.properties'
+
+ext {
+  gradleWrapped = '1.12'
+  
+  libraryVersions = [
+    arquillian: '1.1.4.Final',
+    arquillian_transactions: '1.0.1.Final',
+    arquillian_spring: '1.0.0.Beta2',
+    arquillian_glassfish: '1.0.0.CR4',
+    arquillian_wlp_85: '1.0.0.Alpha2',
+    arquillian_wildfly81: "8.1.0.CR1",
+    wildfly81: "8.1.0.CR1",
+    arquillian_jboss7: '7.1.1.Final',
+    arquillian_jboss61: '1.0.0.CR3',
+    jboss61x: '6.1.0.Final',
+    arquillian_jboss51: '1.0.0.CR3',
+    jboss51x: '5.1.0.GA',
+    arquillian_jboss42: '1.0.0.CR3',
+    jboss42x: '4.2.3.GA',
+    
+    shrinkwrap_resolver: '2.2.0-alpha-1',
+    shrinkwrap_descriptor: '2.0.0-alpha-6',
+    
+    junit: '4.11',
+    hamcrest: '1.3',
+  
+    // jboss 5.1.0 has trouble with 4.0.x versions,
+    // suggested version (here: https://community.jboss.org/thread/202650) is 3.0.5.RELEASE
+    spring: (container.equals("jboss51x") ? '3.1.1.RELEASE' : '4.0.4.RELEASE'),
+    commons_io: '2.4',
+    liquibase: '3.0.7',
+    liquibase_slf4j: '1.2.1',
+    slf4j: '1.7.5',
+    log4j: '1.2.17',
+    
+    h2: '1.4.177',
+    p6spy: '2.0.3-SNAPSHOT',
+   ]
+  
+  // Export methods by turning them into closures
+  // see: http://stackoverflow.com/questions/18715137/extract-common-methods-from-gradle-build-script
+  downloadFile = this.&downloadFile
+}
+
+configurations {
+    provided
+    
+    h2
+    p6spyAll { extendsFrom h2 }
+}
+
+dependencies {
+
+  // all deps we need to deploy in jar have to be scope: compile/runtime, as we use:
+  // ShrinkWrap.create(EmbeddedGradleImporter.class)
+  //        .forThisProjectDirectory()
+  //        .importBuildOutput().as(WebArchive.class)
+  
+  // spring
+  compile "org.springframework:spring-context:$libraryVersions.spring"
+  compile "org.springframework:spring-jdbc:$libraryVersions.spring"
+  compile "org.springframework:spring-tx:$libraryVersions.spring"
+  runtime "org.springframework:spring-web:$libraryVersions.spring"
+
+  compile "commons-io:commons-io:$libraryVersions.commons_io"
+  
+  // junit
+  testCompile "junit:junit:$libraryVersions.junit"
+  testCompile "org.hamcrest:hamcrest-all:$libraryVersions.hamcrest"
+
+  // arquillian
+  testCompile "org.jboss.arquillian.junit:arquillian-junit-container:$libraryVersions.arquillian"
+  testCompile "org.jboss.arquillian.protocol:arquillian-protocol-servlet:$libraryVersions.arquillian"
+  
+  // shrinkwrap
+  testCompile "org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-api-javaee:$libraryVersions.shrinkwrap_descriptor"
+  testRuntime "org.jboss.shrinkwrap.descriptors:shrinkwrap-descriptors-impl-javaee:$libraryVersions.shrinkwrap_descriptor"
+  testCompile "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:$libraryVersions.shrinkwrap_resolver"
+  testCompile "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:$libraryVersions.shrinkwrap_resolver"
+  
+  // arquillian bom
+  testCompile "org.jboss.arquillian:arquillian-bom:$libraryVersions.arquillian"
+  
+  // arquillian tx
+  testCompile "org.jboss.arquillian.extension:arquillian-transaction-spi:$libraryVersions.arquillian_transactions"
+  testCompile "org.jboss.arquillian.extension:arquillian-transaction-impl-base:$libraryVersions.arquillian_transactions"
+
+  // arquillian spring
+  testCompile "org.jboss.arquillian.extension:arquillian-service-integration-spring-inject:$libraryVersions.arquillian_spring"
+
+  // liquibase
+  runtime "org.liquibase:liquibase-core:$libraryVersions.liquibase"
+  runtime "com.mattbertolini:liquibase-slf4j:$libraryVersions.liquibase_slf4j"
+  
+  // logging
+  runtime "org.slf4j:slf4j-log4j12:$libraryVersions.slf4j"
+  runtime "log4j:log4j:$libraryVersions.log4j"
+  
+  // h2/p6spy related jars
+  h2 "com.h2database:h2:$libraryVersions.h2"
+  p6spyAll "p6spy:p6spy:$libraryVersions.p6spy"
+}
+
+//String cliPrefix = System.properties['os.name'].toLowerCase().contains('windows') ? ['cmd', '/c'] : []
+
+// TODO alternative (more gradle like approach: https://stackoverflow.com/questions/17884861/how-to-implement-mavens-unpack-goal-in-case-of-gradle)
+def File downloadFile(String url) {
+  File downloadDir = new File("downloads")
+  downloadDir.mkdirs()
+  
+  // download
+  ant.get(src: url, dest: downloadDir.getName(), skipexisting: "true")
+  new File(downloadDir.getAbsolutePath(), url.substring(url.lastIndexOf("/")))
+}
+
+// define unitTest task before apply, to enable it's manipulation in the applied build scripts
+task unitTest(type: Test) {
+    if (System.getProperty('test.debug', 'false') == 'true') {
+      jvmArgs '-Xdebug',
+              '-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005'
+    }
+    
+    if (System.getProperty('test.single', '') != '') {
+      includes = [System.getProperty('test.single')]
+    }
+    
+    testLogging.showStandardStreams = true
+    testClassesDir = project.sourceSets.test.output.classesDir
+    
+    systemProperty 'arquillian.launch', "${container}"
+    systemProperty 'logDir', buildDir.getAbsolutePath()
+    
+    useJUnit {
+      includeCategories 'com.p6spy.engine.spy.DriverTests', 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+    }
+}
+
+apply from: "./build-${container}.gradle"
+
+// final unitTest task configuration
+unitTest.classpath = project.configurations.getByName("${container}TestRuntime") + project.sourceSets.main.output + project.sourceSets.test.output
+unitTest.dependsOn startContainer
+unitTest.finalizedBy stopContainer
+
+
+//
+// h2 lifecycle
+//
+int h2Instance1Port=9091
+int h2Instance2Port=9092
+
+// for DB testing only
+//task startH2Web(type: JavaExec) {
+//  // TODO fix to more gradle like syntax, see: http://gradle.1045684.n5.nabble.com/Running-a-java-program-from-Gradle-td1435769.html
+//  classpath configurations.h2
+//  main "org.h2.tools.Server"
+//  args "-web", "-browser"
+//}
+
+task startH2S1() {
+    doLast {
+    ant.java( 
+      classname: "org.h2.tools.Server", 
+      classpath: configurations.h2.asPath
+       ) 
+    {
+      arg(value: "-tcp")
+      arg(value: "-tcpDaemon")
+      arg(value: "-tcpPort")
+      arg(value: h2Instance1Port)
+    }
+  }
+}
+
+// gradle task does not keep h2 open on task done => going ant way (still keeping this part for future reference)
+//task startH2S1(type: JavaExec) {
+//  // TODO fix to more gradle like syntax, see: http://gradle.1045684.n5.nabble.com/Running-a-java-program-from-Gradle-td1435769.html
+//  classpath configurations.testRuntime.each { it.getAbsolutePath().contains("/h2/") }
+//  main "org.h2.tools.Server"
+//  args "-tcp", "-tcpDaemon", "-tcpPort", h2Instance1Port
+//}
+
+task startH2S2() {
+  doLast {
+  ant.java(
+    classname: "org.h2.tools.Server",
+    classpath: configurations.h2.asPath
+     )
+  {
+    arg(value: "-tcp")
+    arg(value: "-tcpDaemon")
+    arg(value: "-tcpPort")
+    arg(value: h2Instance2Port)
+  }
+}
+}
+
+task stopH2S1(type: JavaExec, dependsOn: startH2S1) {
+  classpath configurations.h2
+  main "org.h2.tools.Server"
+  args "-tcpShutdown" , "tcp://localhost:" + h2Instance1Port
+}
+
+task stopH2S2(type: JavaExec, dependsOn: startH2S2) {
+  classpath configurations.h2
+  main "org.h2.tools.Server"
+  args "-tcpShutdown", "tcp://localhost:" + h2Instance2Port
+}
+
+startContainer.dependsOn startH2S1, startH2S2
+stopContainer.finalizedBy stopH2S1, stopH2S2
+
+
+task wrapper(type: Wrapper) {
+  gradleVersion = gradleWrapped
+}

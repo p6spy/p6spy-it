@@ -1,0 +1,96 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+configurations {
+  jboss71xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    jboss71xTestRuntime "org.jboss.as:jboss-as-arquillian-container-remote:$libraryVersions.arquillian_jboss7"
+//  jboss71xTestRuntime "org.jboss.as:jboss-as-arquillian-container-managed:$libraryVersions.arquillian_jboss7"
+//  jboss71xTestRuntime "org.jboss.as:jboss-as-arquillian-container-remote:7.1.2.Final"
+  
+    
+    // we need to add p6spy to war classpath, otherwise jboss 7.1.1 fails with:
+    // WARN  [org.jboss.jca.core.connectionmanager.pool.strategy.OnePool] (MSC service thread 1-5) IJ000604: Throwable while attempting to get a new connection: null: javax.resource.ResourceException: Could not create connection
+    // ...
+    // Caused by: java.lang.ClassNotFoundException: com.p6spy.engine.proxy.P6Proxy from [Module "deployment.b64f836d-b014-40b0-9704-1bd8f7073039.war:main" from Service Module Loader]
+    //    at org.jboss.modules.ModuleClassLoader.findClass(ModuleClassLoader.java:190) [jboss-modules.jar:1.1.1.GA]
+    //    at org.jboss.modules.ConcurrentClassLoader.performLoadClassUnchecked(ConcurrentClassLoader.java:468) [jboss-modules.jar:1.1.1.GA]
+    //    at org.jboss.modules.ConcurrentClassLoader.performLoadClassChecked(ConcurrentClassLoader.java:456) [jboss-modules.jar:1.1.1.GA]
+    //    at org.jboss.modules.ConcurrentClassLoader.performLoadClass(ConcurrentClassLoader.java:398) [jboss-modules.jar:1.1.1.GA]
+    //    at org.jboss.modules.ConcurrentClassLoader.loadClass(ConcurrentClassLoader.java:120) [jboss-modules.jar:1.1.1.GA]
+    //    ... 62 more
+//    runtime: "p6spy:p6spy:$libraryVersions.p6spy"
+}
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/jboss"
+String binDir = rootDir + "/bin"
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/jboss-as-7.1.1.Final', dest: 'build/unpack/jboss')
+  }
+}
+
+// not enough to copy to: standalone/deployments
+// due to bug:
+// https://issues.jboss.org/browse/AS7-4222
+// so we'll go for the modules
+task deployH2Jar(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/modules/com/h2/main"
+  include "**/h2*.jar"
+}
+
+task deployP6SpyJar(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/modules/com/p6spy/main"
+  include "**/p6spy*.jar"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into rootDir + "/standalone/configuration"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task configureDS(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/jboss71x"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath(), p6spy_version: libraryVersions.p6spy, h2_version: libraryVersions.h2])
+}
+
+// managed container => nothing to start here
+// commented sections would be valid for remote case
+task startContainer(dependsOn: [ deployH2Jar, deployP6SpyJar, copyConfig, configureDS ]) {
+  doLast {
+    ant.exec(
+      dir: binDir,
+      spawn: true,
+      executable: 'standalone.sh'
+      )
+
+    // well, jboss 7.1.1 seems to boot way faster than previous ones, was not required up to now => commented out
+    // it takes quite some time till jboss boots, let's make sure we wait for it
+    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+      socket (server: "localhost", port: "8080")
+    }
+  }
+}
+
+// managed container => nothing to stop here
+// commented sections would be valid for remote case
+task stopContainer(type:Exec, dependsOn: startContainer) {
+//  doLast {
+//  }
+
+  workingDir binDir
+  commandLine 'bash', '-e', 'jboss-cli.sh', '--connect', 'command=:shutdown' 
+}

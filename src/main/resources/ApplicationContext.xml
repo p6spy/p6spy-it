@@ -1,38 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-    xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xsi:schemaLocation="
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
-   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd"
-    >
+   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-  <context:annotation-config/>
+	<context:annotation-config />
 
-  <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-    <property name="dropFirst" value="true"/>
-    <property name="dataSource" ref="dataSource"/>
-    <property name="changeLog" value="classpath:liquibase.xml"/>
-  </bean>
-  
-  <bean id="dbQuery" class="com.p6spy.testwebapp.DbQuery" depends-on="liquibase">
-  	<property name="dataSource" ref="dataSource"/>
-  </bean>
+ 	<!-- Scans for the beans definitions -->
+    <context:component-scan base-package="com.p6spy.engine.spy.impl"/>
 
-  <beans profile="common">
-	  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-	    <property name="jndiName" value="java:comp/env/jdbc/p6spy"/>
-	    <property name="resourceRef" value="true"/>
-	  </bean>
-  </beans>
-  
-  <!-- jonas has trouble with default jndi ('/' might be problematic) -->
-  <beans profile="jonas">
-	  <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">
-	    <property name="jndiName" value="jdbc_p6spy"/>
-	    <property name="resourceRef" value="true"/>
-	  </bean>
-  </beans>
-  
 </beans>

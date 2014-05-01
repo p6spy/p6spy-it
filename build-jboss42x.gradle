@@ -1,0 +1,81 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+configurations {
+  jboss42xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    // with runtime I had an error:
+    // java.lang.IllegalArgumentException: ArquillianServletRunner not found. Could not determine ContextRoot from ProtocolMetadata, please contact DeployableContainer developer.
+    // so going managed way instead
+//    jboss42xTestRuntime "org.jboss.arquillian.container:arquillian-jbossas-remote-4.2:$libraryVersions.arquillian_jboss42"
+
+    jboss42xTestRuntime "org.jboss.arquillian.container:arquillian-jbossas-managed-4.2:$libraryVersions.arquillian_jboss42"
+  
+    jboss42xTestRuntime "org.jboss.jbossas:jboss-server-manager:1.0.3.GA"
+    jboss42xTestRuntime "org.jboss.client:jbossall-client:$libraryVersions.jboss42x"
+    jboss42xTestRuntime "dom4j:dom4j:1.6.1"
+}
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/jboss"
+String binDir = rootDir + "/bin"
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-4.2.3.GA/jboss-4.2.3.GA-jdk6.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/jboss-4.2.3.GA', dest: 'build/unpack/jboss')
+  }
+}
+
+task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/server/default/lib"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into rootDir + "/server/default/conf"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task configureDS(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/jboss-common"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
+}
+
+// managed container => nothing to start here
+// commented sections would be valid for remote case
+task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, configureDS] ) {
+  doLast {
+//    ant.exec(
+//      dir: binDir,
+//      spawn: true,
+//      executable: 'run.sh'
+//      )
+//    {
+//      arg(value: "-c")
+//      arg(value: "default")
+//    }
+//    
+//    // it takes quite some time till jboss boots, let's make sure we wait for it
+//    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+//      socket (server: "localhost", port: "8080")
+//    }
+  }
+}
+
+// managed container => nothing to stop here
+// commented sections would be valid for remote case
+task stopContainer(/*type:Exec, */dependsOn: startContainer) {
+  doLast {
+  }
+//  workingDir binDir
+//  commandLine 'bash', '-e', 'shutdown.sh', '-S' 
+}
