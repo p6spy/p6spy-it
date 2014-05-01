@@ -61,7 +61,7 @@ task startContainer(dependsOn: [ deployP6SpyJar, copyConfig, configureDS ]) {
     ant.exec(
       dir: binDir,
       spawn: true,
-      executable: 'standalone.sh'
+      executable: './standalone.sh'
     )
 
     // wildfly might not need it due to fast boot
@@ -74,5 +74,5 @@ task startContainer(dependsOn: [ deployP6SpyJar, copyConfig, configureDS ]) {
 
 task stopContainer(type:Exec, dependsOn: startContainer) {
   workingDir binDir
-  commandLine 'jboss-cli.sh', '-c', '--command=shutdown' 
+  commandLine './jboss-cli.sh', '-c', '--command=shutdown' 
 }
