@@ -13,17 +13,11 @@ env:
     - AS=glassfish4x
     - AS=glassfish31x
     
-#before_install:
+before_install:
+  - export ORG_GRADLE_PROJECT_container=${AS}
 # - "sudo apt-get update -qq"
-# - groovy script/travis/generateMavenSettingsForIT.groovy # need cargo snapshots repo
 
-#install: mvn -B dependency:resolve dependency:resolve-plugins --settings ~/.m2/itSettings.xml
- 
-#before_script:
-# - groovy script/travis/generateMavenSettingsForIT.groovy
-  
-#script: mvn -version; mvn clean -B verify -P ${AS} --settings ~/.m2/itSettings.xml
-script: gradle clean unitTest -Pcontainer=${AS} --stacktrace
+script: ./gradlew unitTest --stacktrace
 
 notifications:
  email:
