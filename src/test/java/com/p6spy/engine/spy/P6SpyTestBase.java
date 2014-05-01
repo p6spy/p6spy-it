@@ -23,7 +23,6 @@ public abstract class P6SpyTestBase {
   public static void beforeClass() throws IOException {
     SPY_LOG.delete();
     assertThat(SPY_LOG.exists(), is(equalTo(false)));
-//    new File(System.getProperty("logDir"), "HERE_I_AM").createNewFile();
   }
 
   public static WebArchive createDeployment() {
@@ -34,31 +33,9 @@ public abstract class P6SpyTestBase {
         .importBuildOutput().as(WebArchive.class)
         .addPackages(true, "com.p6spy.engine.spy")
         .addAsWebInfResource(new FileAsset(new File("src/test/config/glassfish-web.Driver.xml")), "glassfish-web.xml")
-  
-//        .addAsWebInfResource("ApplicationContext.xml");
         ;
-    
-//    return ShrinkWrap.create(WebArchive.class)
-//        .addPackages(true, "com.p6spy.engine.spy")
-////        .addAsResource("persistence.xml", "META-INF/persistence.xml")
-//        .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/web.xml")), "web.xml")
-//        .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/glassfish-web.xml")), "glassfish-web.xml")
-//        .addAsWebInfResource("ApplicationContext.xml")
-//        
-//        .addAsWebInfResource(new FileAsset(new File("src/main/webapp/WEB-INF/glassfish-web.xml")), "glassfish-web.xml")
-//        forProjectDirectory(".").-
-////        .addAsLibraries(DependencyResolvers.use(MavenDependencyResolver.class).artifact("com.mydomain:itma-mybatis-impl-postgresql:1.0-SNAPSHOT").resolveAs(GenericArchive.class))
-//        .addAsLibraries(DependencyResolver.use(EmbeddedGradleImporter.class).artifact("com.mydomain:itma-mybatis-impl-postgresql:1.0-SNAPSHOT").resolveAs(GenericArchive.class))
-//        ;
-    
-//    return ShrinkWrap.create(WebArchive.class, "p6spy-it.war")
-//        .addPackage(ContactRepository.class.getPackage())
-//        // .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
-//        .addAsResource("ApplicationContext.xml")
-//        .addAsWebInfResource(EmptyAsset.INSTANCE, ArchivePaths.create("web.xml"));
   }
 
-  
   /**
    * Workaround for problem propagating properties to nested build via withArguments(), 
    * so using tmp file instead.
