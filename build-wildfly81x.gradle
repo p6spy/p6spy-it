@@ -21,13 +21,6 @@ task unpackContainer(type: Copy) {
   into 'build/unpack'
   doLast {
     ant.rename(src: 'build/unpack/wildfly-8.1.0.CR1', dest: 'build/unpack/wildfly')
-    
-    ant.exec(
-      executable: "ls"
-    ) {
-      arg(value: "-lR")
-      arg(value: "${buildDir}/unpack")
-    }
   }
 }
 
