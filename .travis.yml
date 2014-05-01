@@ -17,7 +17,7 @@ before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
 # - "sudo apt-get update -qq"
 
-script: ./gradlew unitTest --stacktrace
+script: ./gradlew unitTest --info
 
 notifications:
  email:
