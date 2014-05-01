@@ -23,7 +23,7 @@ env:
 # - groovy script/travis/generateMavenSettingsForIT.groovy
   
 #script: mvn -version; mvn clean -B verify -P ${AS} --settings ~/.m2/itSettings.xml
-script: gradle clean unitTest -P ${AS}
+script: gradle clean unitTest -Pcontainer=${AS} --stacktrace
 
 notifications:
  email:
