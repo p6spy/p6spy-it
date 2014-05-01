@@ -7,11 +7,11 @@ env:
   matrix:
     - AS=wildfly81x
     #- AS=jboss71x
-#    - AS=jboss61x
-#    - AS=jboss51x
-#    - AS=jboss42x
-#    - AS=glassfish4x
-#    - AS=glassfish31x
+    - AS=jboss61x
+    - AS=jboss51x
+    - AS=jboss42x
+    - AS=glassfish4x
+    - AS=glassfish31x
     
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}

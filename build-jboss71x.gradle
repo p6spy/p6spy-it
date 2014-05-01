@@ -74,7 +74,7 @@ task startContainer(dependsOn: [ deployH2Jar, deployP6SpyJar, copyConfig, config
     ant.exec(
       dir: binDir,
       spawn: true,
-      executable: 'standalone.sh'
+      executable: './standalone.sh'
       )
 
     // well, jboss 7.1.1 seems to boot way faster than previous ones, was not required up to now => commented out

@@ -58,7 +58,7 @@ task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, configureDS, patch
     ant.exec(
       dir: binDir,
       spawn: true,
-      executable: 'run.sh'
+      executable: './run.sh'
       )
     {
       arg(value: "-c")
