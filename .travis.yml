@@ -19,6 +19,6 @@ before_install:
 
 script: ./gradlew unitTest --info
 
-#notifications:
-# email:
-#   - p6spy-developers@googlegroups.com
+notifications:
+email:
+  - p6spy-developers@googlegroups.com
