@@ -8,9 +8,9 @@ dependencies {
   wildfly81xTestRuntime "org.wildfly:wildfly-arquillian-container-remote:$libraryVersions.arquillian_wildfly81"
 }
 
-// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+// didn't figure out how to use javax.sql.DataSource => exclude those tests
 unitTest.useJUnit {
-      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests'
 }
 
 String rootDir = "$buildDir/unpack/wildfly"

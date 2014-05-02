@@ -37,7 +37,7 @@ public class P6SpyDriverTest extends P6SpyTestBase {
             new FileAsset(
                 new File(
                     // jboss is special
-                    (System.getProperty("arquillian.launch").contains("jboss") || System.getProperty("arquillian.launch").contains("wildfly") ? "src/test/config/web.Driver.jboss.xml"
+                    (isJBossOrWildFly() ? "src/test/config/web.Driver.jboss.xml"
                         : "src/test/config/web.Driver.xml"))), "web.xml")
         .addAsWebInfResource(new FileAsset(new File("src/test/config/glassfish-web.Driver.xml")),
             "glassfish-web.xml")
@@ -47,7 +47,7 @@ public class P6SpyDriverTest extends P6SpyTestBase {
             "classes/ApplicationContext.Driver.xml");
 
     // jboss42 is special
-    if (System.getProperty("arquillian.launch").equals("jboss42x")) {
+    if (isJBoss42x()) {
       war.addAsWebInfResource(new FileAsset(new File(
           "src/test/config/jboss-web.Driver.jboss42x.xml")), "jboss-web.xml");
     }

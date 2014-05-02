@@ -34,5 +34,13 @@ public abstract class P6SpyTestBase {
         .addAsWebInfResource(new FileAsset(new File("src/test/config/glassfish-web.Driver.xml")), "glassfish-web.xml")
         ;
   }
+  
+  protected static boolean isJBossOrWildFly() {
+    return System.getProperty("arquillian.launch").contains("jboss") || System.getProperty("arquillian.launch").contains("wildfly");
+  }
+  
+  protected static boolean isJBoss42x() {
+    return System.getProperty("arquillian.launch").equals("jboss42x");
+  }
 
 }

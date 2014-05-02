@@ -43,10 +43,9 @@ public class P6SpyXADataSourceTest extends P6SpyTestBase {
             new FileAsset(
                 new File(
                     // jboss is special
-                    (System.getProperty("arquillian.launch").contains("jboss") ? "src/test/config/web.XADataSource.jboss.xml"
+                    (isJBossOrWildFly() ? "src/test/config/web.XADataSource.jboss.xml"
                         : "src/test/config/web.XADataSource.xml"))), "web.xml")
         .addAsWebInfResource(new FileAsset(new File("src/test/config/glassfish-web.XADataSource.xml")), "glassfish-web.xml")
-
 
         // test specific spring context
         .addAsWebInfResource("ApplicationContext.XADataSource.xml",
