@@ -7,29 +7,26 @@ repositories {
   mavenCentral() 
   mavenLocal()
   
-//  maven {
-//    // required by: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:2.2.0-alpha-1
-//    url 'http://repo.gradle.org/gradle/libs-releases-local'
-//    url 'http://repository.jboss.org/nexus/content/groups/public/'
-//    
-//    // required by jboss51x
-//    url 'https://repository.jboss.org/nexus/content/repositories/deprecated/'
-//    url 'https://repository.jboss.org/nexus/content/repositories/releases/'
-//    
-//    // p6spy snapshots
-//    url 'https://oss.sonatype.org/content/repositories/snapshots'
-//  }
-  
   // required by: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:2.2.0-alpha-1
-  mavenRepo url: 'http://repo.gradle.org/gradle/libs-releases-local'
-  mavenRepo url: 'http://repository.jboss.org/nexus/content/groups/public/'
+  maven {
+    url 'http://repo.gradle.org/gradle/libs-releases-local'
+  }
+  maven {
+    url 'http://repository.jboss.org/nexus/content/groups/public/'
+  } 
   
   // required by jboss51x
-  mavenRepo url: 'https://repository.jboss.org/nexus/content/repositories/deprecated/'
-  mavenRepo url: 'https://repository.jboss.org/nexus/content/repositories/releases/'
-  
+  maven {
+    url 'https://repository.jboss.org/nexus/content/repositories/deprecated/'
+  }
+  maven {
+    url 'https://repository.jboss.org/nexus/content/repositories/releases/'
+  }
+    
   // p6spy snapshots
-  mavenRepo url: 'https://oss.sonatype.org/content/repositories/snapshots'
+  maven {
+    url 'https://oss.sonatype.org/content/repositories/snapshots'
+  }
 }
 
 def loadProperties(String sourceFileName) {
@@ -42,10 +39,6 @@ def loadProperties(String sourceFileName) {
       }
   }
 }
-
-// workaround to propagate properties to nested gradle build (initiated via ShringWrap API)
-// see: https://issues.jboss.org/browse/SHRINKWRAP-482
-loadProperties 'build/nested_build.gradle.properties'
 
 ext {
   gradleWrapped = '1.12'
@@ -83,7 +76,7 @@ ext {
     
     h2: '1.4.177',
     p6spy: '2.0.3-SNAPSHOT',
-   ]
+  ]
   
   // Export methods by turning them into closures
   // see: http://stackoverflow.com/questions/18715137/extract-common-methods-from-gradle-build-script
@@ -96,6 +89,11 @@ configurations {
     h2
     p6spyAll { extendsFrom h2 }
 }
+
+//configurations.p6spyAll {
+//  // check for updates on every build
+//  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+//}
 
 dependencies {
 
@@ -146,7 +144,7 @@ dependencies {
   
   // h2/p6spy related jars
   h2 "com.h2database:h2:$libraryVersions.h2"
-  p6spyAll "p6spy:p6spy:$libraryVersions.p6spy"
+  p6spyAll ("p6spy:p6spy:$libraryVersions.p6spy") /*{ changing=true }*/
 }
 
 //String cliPrefix = System.properties['os.name'].toLowerCase().contains('windows') ? ['cmd', '/c'] : []

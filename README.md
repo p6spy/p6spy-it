@@ -12,7 +12,7 @@ Quickstart
 
      git clone https://github.com/p6spy/p6spy-it.git
      cd p6spy-it
-     ./gradlew clean unitTest -Pcontainer=<app_server>
+     export ORG_GRADLE_PROJECT_container=<app_server>; ./gradlew clean unitTest
      
 where following are available `<app_server>`s provided:
   * `wildfly81x` - Wildfly 8.1.0.CR1

@@ -5,9 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Properties;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.FileAsset;
@@ -26,41 +24,15 @@ public abstract class P6SpyTestBase {
   }
 
   public static WebArchive createDeployment() {
-    dumpProperties();
-    
     return ShrinkWrap.create(EmbeddedGradleImporter.class)
-        .forThisProjectDirectory().forTasks("build")//.withArguments("-x", "test", "-Pcontainer=jboss51x")
+        .forThisProjectDirectory()
+        // rather using env variable: export ORG_GRADLE_PROJECT_container=wildfly81x ; ./gradlew clean unitTest
+        //.forTasks("build")
+        //.withArguments("-x", "test", "-Pcontainer=jboss51x")
         .importBuildOutput().as(WebArchive.class)
         .addPackages(true, "com.p6spy.engine.spy")
         .addAsWebInfResource(new FileAsset(new File("src/test/config/glassfish-web.Driver.xml")), "glassfish-web.xml")
         ;
   }
 
-  /**
-   * Workaround for problem propagating properties to nested build via withArguments(), 
-   * so using tmp file instead.
-   * 
-   * @see <a href="https://issues.jboss.org/browse/SHRINKWRAP-482">SHRINKWRAP-482</a>
-   */
-  private static void dumpProperties() {
-    final File file = new File("build/nested_build.gradle.properties");
-    file.deleteOnExit();
-    
-    FileOutputStream fos = null;
-    try {
-      fos = new FileOutputStream(file);
-      Properties properties = new Properties();
-      properties.put("container", System.getProperty("arquillian.launch"));
-      properties.store(fos, "");
-    } catch (IOException e) {
-      if (null != fos) {
-        try {
-          fos.close();
-        } catch (IOException e1) {
-        }
-      }
-      e.printStackTrace();
-    }
-  }
-  
 }
