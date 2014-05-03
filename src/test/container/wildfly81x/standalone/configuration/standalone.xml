@@ -152,8 +152,7 @@
 			        </security>
                 </datasource>
                 -->
-                <xa-datasource jndi-name="java:/jdbc/h2XADataSourceS1" enabled="true" use-java-context="true" pool-name="h2XADataSourceS1Pool">
-                	<!-- <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class> -->
+                <!-- <xa-datasource jndi-name="java:/jdbc/h2XADataSourceS1" enabled="true" use-java-context="true" pool-name="h2XADataSourceS1Pool">
 					<xa-datasource-property name="URL">jdbc:h2:tcp://localhost:9091/@buildDir@/h2/s1/test2</xa-datasource-property>
                     <driver>h2</driver>
                     <security>
@@ -162,14 +161,14 @@
 			        </security>
                 </xa-datasource>
                 <xa-datasource jndi-name="java:/jdbc/h2XADataSourceS2" enabled="true" use-java-context="true" pool-name="h2XADataSourceS2Pool">
-                  	<!-- <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class> -->
 					<xa-datasource-property name="URL">jdbc:h2:tcp://localhost:9092/@buildDir@/h2/s2/test1</xa-datasource-property>
                     <driver>h2</driver>
                     <security>
 				      <user-name>sa</user-name>
 				      <password></password>
 			        </security>
-                </xa-datasource>
+                </xa-datasource> -->
+
                 <!-- p6spy datasources -->
                 <datasource jndi-name="java:/jdbc/p6SpyDriverS1" enabled="true" use-java-context="true" pool-name="p6spyDriverS1Pool">
 					<connection-url>jdbc:p6spy:h2:tcp://localhost:9091/@buildDir@/h2/s1/test3</connection-url>
@@ -198,11 +197,13 @@
 					<xa-datasource-property name="realDataSource">java:/jdbc/p6spyReal</xa-datasource-property>
                     <driver>p6spy</driver>
                 </xa-datasource> -->
-				<datasource jndi-name="java:/jdbc/p6SpyXADataSourceS1" enabled="true" use-java-context="true" pool-name="p6spyXADataSourceS1Pool">
-					<!-- just to prevent: failure description: "JBAS014746: connection-url may not be null" -->
+                <!-- this neither fails nor proxies -->
+				<!-- <datasource jndi-name="java:/jdbc/p6SpyXADataSourceS1" enabled="true" use-java-context="true" pool-name="p6spyXADataSourceS1Pool">
+					just to prevent: failure description: "JBAS014746: connection-url may not be null"
 					<connection-url>jdbc:p6spy:h2:non-existing-host-name/tmp</connection-url>
+					<connection-property name="realDataSource">java:/jdbc/h2XADataSourceS1</connection-property>
                     <driver>p6spy</driver>
-                </datasource>
+                </datasource> -->
                 
                 <drivers>
                     <driver name="p6spy" module="com.p6spy">
