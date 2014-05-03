@@ -64,5 +64,8 @@ public class P6SpyDriverTest extends P6SpyTestBase {
     assertThat(SPY_LOG.exists(), equalTo(true));
     assertThat(FileUtils.readFileToString(SPY_LOG, "UTF-8").contains(ContactRepository.COUNT_ALL),
         equalTo(true));
+    
+    // make sure that the h2 DB file (proxied one) was really created
+    assertThat(new File(getBuildDir() + "/h2/s1/test3.mv.db").exists(), equalTo(true));
   }
 }

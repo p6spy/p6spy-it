@@ -60,6 +60,10 @@ public class P6SpyXADataSourceTest extends P6SpyTestBase {
     // check cross-DS commit worked
     assertThat(contactService.countById(10), equalTo(1));
     assertThat(custommerService.countById(10), equalTo(1));
+    
+    // make sure that the h2 DB file (proxied one) was really created
+    assertThat(new File(getBuildDir() + "/h2/s1/test2.mv.db").exists(), equalTo(true));
+    assertThat(new File(getBuildDir() + "/h2/s2/test1.mv.db").exists(), equalTo(true));
   }
   
   @Test
@@ -72,6 +76,11 @@ public class P6SpyXADataSourceTest extends P6SpyTestBase {
       // check cross-DS commit worked
       assertThat(contactService.countById(20), equalTo(0));
       assertThat(custommerService.countById(20), equalTo(0));
+      
+      // make sure that the h2 DB file (proxied one) was really created
+      assertThat(new File(getBuildDir() + "/h2/s1/test2.mv.db").exists(), equalTo(true));
+      assertThat(new File(getBuildDir() + "/h2/s2/test1.mv.db").exists(), equalTo(true));
+
       return;
     }
     

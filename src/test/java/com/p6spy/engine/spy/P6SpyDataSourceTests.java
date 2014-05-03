@@ -39,11 +39,6 @@ public class P6SpyDataSourceTests extends P6SpyTestBase {
             "classes/ApplicationContext.DataSource.xml");
   }
 
-//  @Autowired
-//  public void setContactService(ContactService contactService) {
-//    this.contactService = contactService;
-//  }
-
   @Autowired
   protected ContactService contactService;
   
@@ -56,5 +51,8 @@ public class P6SpyDataSourceTests extends P6SpyTestBase {
     assertThat(SPY_LOG.exists(), equalTo(true));
     assertThat(FileUtils.readFileToString(SPY_LOG, "UTF-8").contains(ContactRepository.COUNT_ALL),
         equalTo(true));
+    
+    // make sure that the h2 DB file (proxied one) was really created
+    assertThat(new File(getBuildDir() + "/h2/s1/test1.mv.db").exists(), equalTo(true));
   }
 }
