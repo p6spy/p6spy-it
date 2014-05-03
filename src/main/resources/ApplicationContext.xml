@@ -12,4 +12,6 @@
  	<!-- Scans for the beans definitions -->
     <context:component-scan base-package="com.p6spy.engine.spy.impl"/>
 
+	<!-- propagate system props to build -->
+	<context:property-placeholder location="classpath:system.properties" />
 </beans>

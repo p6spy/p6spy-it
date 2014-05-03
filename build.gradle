@@ -174,7 +174,7 @@ task unitTest(type: Test) {
     testClassesDir = project.sourceSets.test.output.classesDir
     
     systemProperty 'arquillian.launch', "${container}"
-    systemProperty 'logDir', buildDir.getAbsolutePath()
+    systemProperty 'buildDir', buildDir.getAbsolutePath()
     
     useJUnit {
       includeCategories 'com.p6spy.engine.spy.DriverTests', 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
