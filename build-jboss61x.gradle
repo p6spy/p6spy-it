@@ -33,7 +33,7 @@ task unpackContainer(type: Copy) {
 
 task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
   from configurations.p6spyAll
-  into rootDir + "/server/default/deploy"
+  into rootDir + "/server/default/lib"
 }
 
 task copyConfig(type: Copy, dependsOn: unpackContainer) {
