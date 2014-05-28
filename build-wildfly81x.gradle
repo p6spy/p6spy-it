@@ -44,7 +44,7 @@ task copyConfig(type: Copy, dependsOn: unpackContainer) {
 }
 
 task configureDS(type: Copy, dependsOn: unpackContainer) {
-  from "$buildDir/../src/test/container/wildfly81x"
+  from "$buildDir/../src/test/container/${container}"
   into rootDir
   filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath(), p6spy_version: libraryVersions.p6spy, h2_version: libraryVersions.h2])
 }

@@ -49,7 +49,7 @@ task configureDS(type: Copy, dependsOn: unpackContainer) {
 }
 
 task patchContainer(type: Copy, dependsOn: unpackContainer) {
-  from "$buildDir/../src/test/container/jboss61x"
+  from "$buildDir/../src/test/container/${container}"
   into rootDir
 }
 
