@@ -12,6 +12,8 @@ env:
     - AS=jboss42x
     - AS=glassfish4x
     - AS=glassfish31x
+    - AS=tomcat7x
+    - AS=tomcat6x
     
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}

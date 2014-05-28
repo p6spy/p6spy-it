@@ -58,6 +58,7 @@ ext {
     jboss51x: '5.1.0.GA',
     arquillian_jboss42: '1.0.0.CR3',
     jboss42x: '4.2.3.GA',
+    arquillian_tomcat: '1.0.0.CR6',
     
     shrinkwrap_resolver: '2.2.0-alpha-1',
     shrinkwrap_descriptor: '2.0.0-alpha-6',
@@ -75,7 +76,7 @@ ext {
     log4j: '1.2.17',
     
     h2: '1.4.177',
-    p6spy: '2.0.3-SNAPSHOT',
+    p6spy: '2.1.0-SNAPSHOT',
   ]
   
   // Export methods by turning them into closures

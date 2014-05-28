@@ -1,0 +1,71 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/apache-tomcat"
+String binDir = rootDir + "/bin"
+
+task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/lib"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy_with_explicit_drivername.properties"
+  into rootDir + "/bin"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+  doLast {
+    ant.rename(src: rootDir + '/bin/spy_with_explicit_drivername.properties', dest: rootDir + '/bin/spy.properties')
+  }
+}
+
+task patchContainer(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/tomcat-common"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
+}
+
+
+//task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, configureDS] ) {
+//  doLast {
+//    ant.exec(
+//      dir: binDir,
+//      spawn: true,
+//      executable: './startup.sh'
+//      )
+////    {
+////      arg(value: "-c")
+////      arg(value: "default")
+////    }
+//
+//    // it takes quite some time till jboss boots, let's make sure we wait for it
+//    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+//      socket (server: "localhost", port: "8080")
+//    }
+//  }
+//}
+
+task startContainer(/*type:Exec, */ dependsOn: [ deployP6SpyJars, copyConfig, patchContainer] ) {
+/*  doFirst {
+    ant.project.properties['env.JAVA_OPTS'] = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8089 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
+  }
+  
+  workingDir binDir
+  commandLine 'bash', '-e',  'catalina.sh', 'start'
+  
+  doLast {
+    // it takes quite some time till tomcat boots, let's make sure we wait for it
+      ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+        socket (server: "localhost", port: "8080")
+      }
+  }
+*/
+}
+
+task stopContainer(/*type:Exec,*/ dependsOn: startContainer) {
+//  workingDir binDir
+//  commandLine 'bash', '-e', 'shutdown.sh'
+}

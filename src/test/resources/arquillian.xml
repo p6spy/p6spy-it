@@ -62,4 +62,28 @@
 		</configuration>
 	</container>
 
+	<container qualifier="tomcat6x">
+		<configuration>
+			<property name="catalinaHome">build/unpack/apache-tomcat</property>
+            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
+            <!-- <property name="javaVmArguments">-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y -Xmx512m -XX:MaxPermSize=128m</property> -->
+			<property name="httpPort">8089</property>
+            <property name="httpPort">8080</property>
+            <property name="user">admin</property>
+            <property name="pass">admin</property>
+        </configuration>
+	</container>
+	
+	<container qualifier="tomcat7x">
+		<configuration>
+			<property name="catalinaHome">build/unpack/apache-tomcat</property>
+            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
+            <!-- <property name="javaVmArguments">-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y -Xmx512m -XX:MaxPermSize=128m</property> -->
+			<property name="httpPort">8089</property>
+            <property name="httpPort">8080</property>
+            <property name="user">admin</property>
+            <property name="pass">admin</property>
+        </configuration>
+	</container>
+
 </arquillian>
