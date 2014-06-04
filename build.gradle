@@ -59,6 +59,7 @@ ext {
     arquillian_jboss42: '1.0.0.CR3',
     jboss42x: '4.2.3.GA',
     arquillian_tomcat: '1.0.0.CR6',
+    arquillian_tomee: '1.6.0.2',
     
     shrinkwrap_resolver: '2.2.0-alpha-1',
     shrinkwrap_descriptor: '2.0.0-alpha-6',

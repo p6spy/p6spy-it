@@ -86,4 +86,22 @@
         </configuration>
 	</container>
 
+	<container qualifier="tomee16xweb">
+        <configuration>
+               <property name="httpPort">-1</property>
+               <property name="stopPort">-1</property>
+               <property name="ajpPort">-1</property>
+               <property name="dir">build/unpack/apache-tomcat</property>
+           </configuration>
+	</container>
+	
+	<container qualifier="tomee16xplus">
+        <configuration>
+               <property name="httpPort">-1</property>
+               <property name="stopPort">-1</property>
+               <property name="ajpPort">-1</property>
+               <property name="dir">build/unpack/apache-tomcat</property>
+           </configuration>
+	</container>
+
 </arquillian>

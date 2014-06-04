@@ -23,6 +23,24 @@ where following are available `<app_server>`s provided:
   * `glassfish31x` - Glassfish 3.1.2.2
   * `tomcat7x` - Tomcat 7.0.54
   * `tomcat6x` - Tomcat 6.0.39
+  * `tomee16xweb` - Tomee 1.6.0.2 Webprofile
+  * `tomee16xplus` - Tomee 1.6.0.2 Plus
+
+Debugging
+---------
+
+To debug JUnit test (**not in-container part**) run, use:
+
+	export ORG_GRADLE_PROJECT_container=<app_server>; ./gradlew clean unitTest -Dtest.debug=true
+
+and connect via the IDE of your choice for remote debugging afterwards using the port `5005`.
+
+
+To debug JUnit test (**in-container part**) run adopt `arquilian.xml` respectively afterwards use:
+
+	export ORG_GRADLE_PROJECT_container=<app_server>; ./gradlew clean unitTest
+	
+and connect via the IDE of your choice for remote debugging afterwards using the port you specified previously as the `<debugging_port>`.
 
 Misc
 ----

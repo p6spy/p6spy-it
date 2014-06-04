@@ -14,6 +14,8 @@ env:
     - AS=glassfish31x
     - AS=tomcat7x
     - AS=tomcat6x
+    - AS=tomee16xweb
+    - AS=tomee16xplus
     
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}

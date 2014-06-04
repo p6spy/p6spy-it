@@ -1,31 +1,43 @@
 package com.p6spy.engine.spy;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.RandomAccessFile;
 
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.FileAsset;
 import org.jboss.shrinkwrap.api.gradle.archive.importer.embedded.EmbeddedGradleImporter;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Value;
+
 
 public abstract class P6SpyTestBase {
 
-	public static final File SPY_LOG = new File(/*
+	protected static final File SPY_LOG = new File(/*
 												 * System.getProperty("buildDir")
+												 * getBuildDir()
 												 * ,
-												 */"spy.it.log");
+												 */
+	                        "spy.it.log");
 
-	@BeforeClass
-	public static void beforeClass() throws IOException {
-		SPY_LOG.delete();
-		assertThat(SPY_LOG.exists(), is(equalTo(false)));
+	@Before
+	public void beforeClass() throws IOException {
+	  // for some reason tomee loads this class twice during single test => can't simply 
+	  // delete, rather clear file contents
+//	  SPY_LOG.delete();
+//		assertThat(SPY_LOG.exists(), equalTo(false));
+	  
+	  RandomAccessFile raf = null;
+	  try {
+	    raf = new RandomAccessFile(SPY_LOG, "rw");
+	    raf.setLength(0);
+	  } finally {
+	    if (null != raf) {
+	      raf.close();
+	    }
+	  }
 	}
 
 	public static WebArchive createDeployment() {
@@ -60,13 +72,14 @@ public abstract class P6SpyTestBase {
 			fos = new FileOutputStream(file);
 			System.getProperties().store(fos, "");
 		} catch (IOException e) {
-			if (null != fos) {
-				try {
-					fos.close();
-				} catch (IOException e1) {
-				}
-			}
 			e.printStackTrace();
+		} finally {
+		  if (null != fos) {
+        try {
+          fos.close();
+        } catch (IOException e1) {
+        }
+      }
 		}
 		return file;
 	}
@@ -82,7 +95,7 @@ public abstract class P6SpyTestBase {
 
 	// injected in the container
 	@Value("${buildDir}")
-    private String buildDir;
+  private String buildDir;
 	
 	protected String getBuildDir() {
 		return buildDir;

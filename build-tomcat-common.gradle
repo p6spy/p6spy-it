@@ -15,10 +15,10 @@ task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
 
 task copyConfig(type: Copy, dependsOn: unpackContainer) {
   from "$buildDir/../src/test/config/spy_with_explicit_drivername.properties"
-  into rootDir + "/bin"
+  into rootDir + "/lib"
   filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
   doLast {
-    ant.rename(src: rootDir + '/bin/spy_with_explicit_drivername.properties', dest: rootDir + '/bin/spy.properties')
+    ant.rename(src: rootDir + '/lib/spy_with_explicit_drivername.properties', dest: rootDir + '/lib/spy.properties')
   }
 }
 
@@ -28,44 +28,9 @@ task patchContainer(type: Copy, dependsOn: unpackContainer) {
   filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
 }
 
+// managed adapter in use => no manual startup/shutdown required
 
-//task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, configureDS] ) {
-//  doLast {
-//    ant.exec(
-//      dir: binDir,
-//      spawn: true,
-//      executable: './startup.sh'
-//      )
-////    {
-////      arg(value: "-c")
-////      arg(value: "default")
-////    }
-//
-//    // it takes quite some time till jboss boots, let's make sure we wait for it
-//    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
-//      socket (server: "localhost", port: "8080")
-//    }
-//  }
-//}
-
-task startContainer(/*type:Exec, */ dependsOn: [ deployP6SpyJars, copyConfig, patchContainer] ) {
-/*  doFirst {
-    ant.project.properties['env.JAVA_OPTS'] = '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=8089 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false'
-  }
-  
-  workingDir binDir
-  commandLine 'bash', '-e',  'catalina.sh', 'start'
-  
-  doLast {
-    // it takes quite some time till tomcat boots, let's make sure we wait for it
-      ant.waitfor(maxwait: "60", maxwaitunit: "second") {
-        socket (server: "localhost", port: "8080")
-      }
-  }
-*/
+task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, patchContainer] ) {
 }
-
-task stopContainer(/*type:Exec,*/ dependsOn: startContainer) {
-//  workingDir binDir
-//  commandLine 'bash', '-e', 'shutdown.sh'
+task stopContainer(dependsOn: startContainer) {
 }
