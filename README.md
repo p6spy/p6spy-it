@@ -40,7 +40,7 @@ To debug JUnit test (**in-container part**) run adopt `arquilian.xml` respective
 
 	export ORG_GRADLE_PROJECT_container=<app_server>; ./gradlew clean unitTest
 	
-and connect via the IDE of your choice for remote debugging afterwards using the port you specified previously as the `<debugging_port>`.
+and connect via the IDE of your choice for remote debugging afterwards using the port specified.
 
 Misc
 ----
