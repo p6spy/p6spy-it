@@ -1,0 +1,111 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+configurations {
+  jboss51xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+  
+    jboss51xTestRuntime "org.jboss.arquillian.container:arquillian-jbossas-remote-5.1:$libraryVersions.arquillian_jboss51"
+    
+    jboss51xTestRuntime ("org.jboss.jbossas:jboss-as-client:$libraryVersions.jboss51x") 
+    {
+      exclude (group: "cglib", module: "cglib")
+      exclude (group: "javax.security", module: "jaas")
+      exclude (group: "javax.security", module: "jacc")
+    }
+    
+    // misc wrong versions comming from: org.jboss.jbossas:jboss-as-client:$libraryVersions.jboss51x
+     
+    // to prevent: Could not find cglib:cglib:2.1.3.
+    jboss51xTestRuntime "cglib:cglib:2.1_3"
+
+    // to prevent: java.lang.ClassNotFoundException: org.jboss.security.SecurityContextAssociation
+    jboss51xTestRuntime "org.jboss.security:jboss-security-spi-bare:2.0.3.SP1"
+}
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/jboss"
+String binDir = rootDir + "/bin"
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://downloads.sourceforge.net/project/jboss/JBoss/JBoss-5.1.0.GA/jboss-5.1.0.GA-jdk6.zip"))}
+  into 'build/unpack'
+  // to prevent: 
+  // Caused by: java.lang.IllegalArgumentException: Exception loading class for ScopeKey addition.
+  //  at org.jboss.deployers.vfs.deployer.kernel.BeanMetaDataFactoryVisitor.addBeanComponent(BeanMetaDataFactoryVisitor.java:67)
+  // ...
+  // see: https://community.jboss.org/thread/163357 
+//  exclude '**/server/default/deployers/webbeans.deployer/**/*.*' 
+  
+  doLast {
+    ant.rename(src: 'build/unpack/jboss-5.1.0.GA', dest: 'build/unpack/jboss')
+//    ant.delete( dir: 'build/unpack/jboss/server/default/deployers/jbossws.deployer' )
+  }
+}
+
+task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/server/default/deploy"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into rootDir + "/server/default/conf"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task configureDS(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/jboss-common"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
+}
+
+//ant.mkdir ( dir: 'build/unpack' )
+//ant.unzip ( src: "downloads/jbossws-cxf-3.3.0.GA.zip", dest: 'build/unpack')
+//ant.move ( file: "build/unpack/jbossws-cxf-bin-dist/ant.properties.example", tofile: "build/unpack/jbossws-cxf-bin-dist/ant.properties" )
+//ant.replace ( file: "build/unpack/jbossws-cxf-bin-dist/ant.properties", token: "@jboss510.home@", value: rootDir )
+//    ant.replace (file: "build/unpack/jbossws-cxf-bin-dist/tests/ant-import/build-testsuite.xml",
+//      token: 'target name="test"',
+//      value: 'target name="testFoo"'
+//    )
+//    
+//    ant.replace (file: "build/unpack/jbossws-cxf-bin-dist/build.xml",
+//       token: '"clean',
+//       value: '"cleanFoo'
+//    )
+//    ant.replace (file: "build/unpack/jbossws-cxf-bin-dist/build/user-project-build.xml",
+//      token: '"clean',
+//      value: '"cleanFoo'
+//    )
+//
+//    ant.importBuild 'build/unpack/jbossws-cxf-bin-dist/build.xml'
+//    
+
+task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, configureDS] ) {
+  doLast {
+    ant.exec(
+      dir: binDir,
+      spawn: true,
+      executable: './run.sh'
+      )
+    {
+      arg(value: "-c")
+      arg(value: "default")
+    }
+    
+    // it takes quite some time till jboss boots, let's make sure we wait for it
+    ant.waitfor(maxwait: "60", maxwaitunit: "second") {
+      socket (server: "localhost", port: "8080")
+    }
+  }
+}
+
+task stopContainer(type:Exec, dependsOn: startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'shutdown.sh', '-S' 
+}

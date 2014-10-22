@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources>
+	<!-- h2 datasources -->
+	<!-- <local-tx-datasource>
+		<jndi-name>env/jdbc/h2ConnectionPoolDataSourceS1</jndi-name>
+		<connection-url>jdbc:h2:tcp://localhost:9091/@buildDir@/h2/s1/test1
+		</connection-url>
+		<driver-class>org.h2.Driver</driver-class>
+		<user-name>sa</user-name>
+		<password></password>
+	</local-tx-datasource> -->
+
+<!--  would be required for XADataSource tests -->
+<!-- 
+	<xa-datasource>
+		<jndi-name>jdbc/h2XADataSourceS1</jndi-name>
+		<xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+		<xa-datasource-property name="URL">jdbc:h2:tcp://localhost:9091/@buildDir@/h2/s1/test2
+		</xa-datasource-property>
+		<user-name>sa</user-name>
+		<password></password>
+	</xa-datasource>
+	 -->
+	 
+<!--  would be required for XADataSource tests -->
+<!-- 
+	<xa-datasource>
+		<jndi-name>jdbc/h2XADataSourceS2</jndi-name>
+		<xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+		<xa-datasource-property name="URL">jdbc:h2:tcp://localhost:9092/@buildDir@/h2/s2/test1
+		</xa-datasource-property>
+		<user-name>sa</user-name>
+		<password></password>
+	</xa-datasource>
+ -->
+ 
+	<!-- p6spy datasources -->
+	<local-tx-datasource>
+		<jndi-name>jdbc/p6SpyDriverS1</jndi-name>
+		<connection-url>jdbc:p6spy:h2:tcp://localhost:9091/@buildDir@/h2/s1/test3
+		</connection-url>
+		<driver-class>com.p6spy.engine.spy.P6SpyDriver</driver-class>
+		<user-name>sa</user-name>
+		<password></password>
+	</local-tx-datasource>
+
+	<!-- for JBoss 6.1 no XA datasource for p6spy possible -->
+	<!-- neither using xa-datasource, as it leads to:
+	WARN  [org.jboss.resource.connectionmanager.JBossManagedConnectionPool] (WorkerThread#0[127.0.0.1:53246]) Throwable while attempting to get a new connection: null: org.jboss.resource.JBossResourceException: Could not create connection; - nested throwable: (java.lang.IllegalStateException: realdatasource type not supported: org.jboss.resource.adapter.jdbc.WrapperDataSource@25798c67)
+	...
+	Caused by: java.lang.IllegalStateException: realdatasource type not supported: org.jboss.resource.adapter.jdbc.WrapperDataSource@25798c67
+	at com.p6spy.engine.spy.P6DataSource.castRealDS(P6DataSource.java:353) [:]
+	at com.p6spy.engine.spy.P6DataSource.getXAConnection(P6DataSource.java:338) [:]
+	at org.jboss.resource.adapter.jdbc.xa.XAManagedConnectionFactory.getXAManagedConnection(XAManagedConnectionFactory.java:458) [:6.1.0.Final]
+	... 110 more
+	 -->
+<!--
+ 	<xa-datasource>
+		<jndi-name>jdbc/p6SpyXADataSourceS1</jndi-name>
+		<xa-datasource-class>com.p6spy.engine.spy.P6DataSource
+		</xa-datasource-class>
+		<xa-datasource-property name="RealDataSource">java:comp/env/jdbc/h2XADataSourceS1
+		</xa-datasource-property>
+		<user-name>sa</user-name>
+		<password></password>
+	</xa-datasource>
+
+ -->
+
+	<!-- nor using local-tx-datasource (would be a hacky way) for JBoss 6.1, as it just ignores driver and goes for conneciton-url
+		=> P6SpyDriver gets in use, that has no clue of the realDataSource stuff-->
+	<!-- 
+	<local-tx-datasource>
+		<jndi-name>jdbc/p6SpyXADataSourceS1</jndi-name>
+		<driver-class>com.p6spy.engine.spy.P6DataSource
+		</driver-class>
+	<!- -	otherwise fails on JBoss 6.1 with:
+		DEPLOYMENTS IN ERROR:
+  		Deployment "vfs:///home/peterb/all/prg/oss/p6spy-it/build/unpack/jboss/server/default/deploy/p6spy-ds.xml" is in error due to the following reason(s): org.jboss.resource.JBossResourceException: connectionURL is null 
+	- ->
+		<connection-url>jdbc:p6spy:h2:non-existing-host-name/tmp</connection-url>
+		<connection-property name="RealDataSource">java:comp/env/jdbc/h2XADataSourceS1
+		</connection-property>
+		<user-name>sa</user-name>
+		<password></password>
+	</local-tx-datasource>
+ -->
+</datasources>

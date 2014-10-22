@@ -1,0 +1,36 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+// didn't figure out how to use neither javax.sql.DataSource nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DataSourceTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+String rootDir = "$buildDir/unpack/apache-tomcat"
+String binDir = rootDir + "/bin"
+
+task deployP6SpyJars(type: Copy, dependsOn: unpackContainer) {
+  from configurations.p6spyAll
+  into rootDir + "/lib"
+}
+
+task copyConfig(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/config/spy_with_explicit_drivername.properties"
+  into rootDir + "/lib"
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+  doLast {
+    ant.rename(src: rootDir + '/lib/spy_with_explicit_drivername.properties', dest: rootDir + '/lib/spy.properties')
+  }
+}
+
+task patchContainer(type: Copy, dependsOn: unpackContainer) {
+  from "$buildDir/../src/test/container/tomcat-common"
+  into rootDir
+  filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
+}
+
+// managed adapter in use => no manual startup/shutdown required
+
+task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, patchContainer] ) {
+}
+task stopContainer(dependsOn: startContainer) {
+}

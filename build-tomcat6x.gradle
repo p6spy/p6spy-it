@@ -1,0 +1,19 @@
+configurations {
+  tomcat6xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    tomcat6xTestRuntime "org.jboss.arquillian.container:arquillian-tomcat-managed-6:$libraryVersions.arquillian_tomcat"
+}
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://mirror.netcologne.de/apache.org/tomcat/tomcat-6/v6.0.39/bin/apache-tomcat-6.0.39.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/apache-tomcat-6.0.39', dest: 'build/unpack/apache-tomcat')
+  // let's make to have stuff executable
+//  ant.chmod( dir: "$binDir", includes: "*.sh", perm: "+x")
+  }
+}
+
+apply from: "build-tomcat-common.gradle"

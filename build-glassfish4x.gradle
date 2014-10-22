@@ -1,0 +1,17 @@
+configurations {
+  glassfish4xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+  glassfish4xTestRuntime "org.jboss.arquillian.container:arquillian-glassfish-remote-3.1:$libraryVersions.arquillian_glassfish"
+}
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/glassfish4', dest: 'build/unpack/glassfish')
+  }
+}
+
+apply from: "build-glassfish-common.gradle"

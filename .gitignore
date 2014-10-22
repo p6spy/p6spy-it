@@ -1,7 +1,6 @@
 *.class
 
 # Package Files #
-*.jar
 *.war
 *.ear
 /atlassian-ide-plugin.xml
@@ -11,3 +10,9 @@
 .project
 target
 .idea
+
+# gradle related
+.gradle
+downloads
+bin
+build
