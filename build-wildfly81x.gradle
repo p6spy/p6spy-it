@@ -35,6 +35,13 @@ task deployP6SpyJar(type: Copy, dependsOn: unpackContainer) {
   from configurations.p6spyAll
   into rootDir + "/modules/system/layers/base/com/p6spy/main"
   include "**/p6spy*.jar"
+  rename { filename ->
+    if( filename =~ /p6spy/ ) {
+      new File(new File(filename).parent, '/p6spy.jar').path
+    } else {
+      null
+    }  
+  }  
 }
 
 task copyConfig(type: Copy, dependsOn: unpackContainer) {

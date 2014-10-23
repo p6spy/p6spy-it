@@ -1,6 +1,6 @@
 <module xmlns="urn:jboss:module:1.0" name="com.p6spy">
     <resources>
-        <resource-root path="p6spy-@p6spy_version@.jar"/>
+        <resource-root path="p6spy.jar"/>
     </resources>
     <dependencies>
         <module name="javax.api"/>
