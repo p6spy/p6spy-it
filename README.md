@@ -21,6 +21,7 @@ where following are available `<app_server>`s provided:
   * `jboss42x` - JBoss 4.2.3.GA
   * `glassfish4x` - Glassfish 4.0
   * `glassfish31x` - Glassfish 3.1.2.2
+  * `tomcat8x` - Tomcat 8.0.15
   * `tomcat7x` - Tomcat 7.0.54
   * `tomcat6x` - Tomcat 6.0.39
   * `tomee16xweb` - Tomee 1.6.0.2 Webprofile

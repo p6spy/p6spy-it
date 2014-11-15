@@ -1,0 +1,19 @@
+configurations {
+  tomcat8xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    tomcat8xTestRuntime "org.jboss.arquillian.container:arquillian-tomcat-managed-7:$libraryVersions.arquillian_tomcat"
+}
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/apache-tomcat-8.0.15', dest: 'build/unpack/apache-tomcat')
+  // let's make to have stuff executable
+//  ant.chmod( dir: "$binDir", includes: "*.sh", perm: "+x")
+  }
+}
+
+apply from: "build-tomcat-common.gradle"
