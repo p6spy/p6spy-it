@@ -17,10 +17,10 @@ String rootDir = "$buildDir/unpack/wildfly"
 String binDir = rootDir + "/bin"
 
 task unpackContainer(type: Copy) {
-  from { zipTree( downloadFile("http://download.jboss.org/wildfly/8.1.0.CR1/wildfly-8.1.0.CR1.zip"))}
+  from { zipTree( downloadFile("http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip"))}
   into 'build/unpack'
   doLast {
-    ant.rename(src: 'build/unpack/wildfly-8.1.0.CR1', dest: 'build/unpack/wildfly')
+    ant.rename(src: 'build/unpack/wildfly-8.1.0.Final', dest: 'build/unpack/wildfly')
   }
 }
 
