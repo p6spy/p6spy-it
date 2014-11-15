@@ -15,7 +15,7 @@ Quickstart
      export ORG_GRADLE_PROJECT_container=<app_server>; ./gradlew clean unitTest
      
 where following are available `<app_server>`s provided:
-  * `wildfly81x` - Wildfly 8.1.0.CR1
+  * `wildfly81x` - Wildfly 8.1.0.Final
   * `jboss61x` - JBoss 6.1.0.Final
   * `jboss51x` - JBoss 5.1.0.GA
   * `jboss42x` - JBoss 4.2.3.GA
