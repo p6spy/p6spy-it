@@ -21,7 +21,8 @@ env:
 
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
-# - "sudo apt-get update -qq"
+  - sudo apt-get update -qq
+  - sudo apt-get install ant -y -qq
 
 script: ./gradlew unitTest --info
 
