@@ -29,16 +29,6 @@ repositories {
   }
 }
 
-def loadProperties(String sourceFileName) {
-  def config = new Properties()
-  def propFile = new File(sourceFileName)
-  if (propFile.canRead()) {
-      config.load(new FileInputStream(propFile))
-      for (Map.Entry property in config) {
-          ext[property.key] = property.value;
-      }
-  }
-}
 
 ext {
   gradleWrapped = '1.12'
@@ -48,7 +38,7 @@ ext {
     arquillian_transactions: '1.0.1.Final',
     arquillian_spring: '1.0.0.Beta2',
     arquillian_glassfish: '1.0.0.CR4',
-    arquillian_wlp_85: '1.0.0.Alpha2',
+    arquillian_wls: '1.0.0.Alpha2',
     arquillian_wildfly81: "8.1.0.CR1",
     wildfly81: "8.1.0.CR1",
     arquillian_jboss7: '7.1.1.Final',
@@ -158,7 +148,11 @@ def File downloadFile(String url) {
   
   // download
   ant.get(src: url, dest: downloadDir.getName(), skipexisting: "true")
-  new File(downloadDir.getAbsolutePath(), url.substring(url.lastIndexOf("/")))
+  
+  String name = url.substring(url.lastIndexOf("/"))
+  name = name.contains("?") ? name.substring(0, name.indexOf("?")) : name
+
+  new File(downloadDir.getAbsolutePath(), name)
 }
 
 // define unitTest task before apply, to enable it's manipulation in the applied build scripts

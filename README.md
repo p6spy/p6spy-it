@@ -26,6 +26,7 @@ where following are available `<app_server>`s provided:
   * `tomcat6x` - Tomcat 6.0.39
   * `tomee16xweb` - Tomee 1.6.0.2 Webprofile
   * `tomee16xplus` - Tomee 1.6.0.2 Plus
+  * `wls12x` - WebLogic 12.1.3 (for development)
 
 Debugging
 ---------

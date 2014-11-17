@@ -17,6 +17,7 @@ env:
     - AS=tomcat6x
     - AS=tomee16xweb
     - AS=tomee16xplus
+    - AS=wls12x
 
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
