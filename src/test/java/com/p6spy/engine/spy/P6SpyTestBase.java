@@ -52,10 +52,6 @@ public abstract class P6SpyTestBase {
 				.importBuildOutput()
 				.as(WebArchive.class)
 				.addPackages(true, "com.p6spy.engine.spy")
-				.addAsWebInfResource(
-						new FileAsset(new File(
-								"src/test/config/glassfish-web.Driver.xml")),
-						"glassfish-web.xml")
 
 				// propagate system properties to in-container junit tests
 				.addAsResource(getFileDumpedSystemProperties());
@@ -94,6 +90,7 @@ public abstract class P6SpyTestBase {
 	}
 
 	// injected in the container
+//	@Value("#{systemProperties.buildDir}")
 	@Value("${buildDir}")
   private String buildDir;
 	
