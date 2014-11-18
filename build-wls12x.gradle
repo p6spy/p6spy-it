@@ -32,6 +32,13 @@ task createDomain(dependsOn: unpackContainer) {
     // fix script to prevent input to be requested
     //
     
+    // patching script to work also in case no ANT_HOME provided
+    ant.replace(
+      file: "$rootDir/configure.sh",
+      token: "# define some constants",
+      value: "# define some constants\nSCRIPT_DIR=$rootDir"
+      )
+    
     // create domain [y]
     ant.replace(
       file: "$rootDir/configure.sh",

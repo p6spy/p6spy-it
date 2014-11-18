@@ -94,6 +94,7 @@
             <property name="httpPort">8080</property>
             <property name="user">admin</property>
             <property name="pass">admin</property>
+            <!-- <property name="javaVmArguments">-DbuildDir=${buildDir}</property> -->
         </configuration>
 	</container>
 
@@ -115,4 +116,14 @@
            </configuration>
 	</container>
 
+	<container qualifier="wls12x">
+        <configuration>
+            <property name="wlsHome">build/unpack/wls12/wlserver</property>
+            <property name="adminUrl">t3://localhost:7001</property>
+            <property name="adminUserName">weblogic</property>
+            <property name="adminPassword">weblogic123</property>
+            <property name="target">myserver</property>
+        </configuration>
+    </container>
+    
 </arquillian>
