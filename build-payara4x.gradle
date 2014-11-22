@@ -1,0 +1,17 @@
+configurations {
+  payara4xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+  payara4xTestRuntime "org.jboss.arquillian.container:arquillian-glassfish-remote-3.1:$libraryVersions.arquillian_glassfish"
+}
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("https://github.com/payara/Payara/releases/download/payara-server-4.1.144/payara.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/payara', dest: 'build/unpack/glassfish')
+  }
+}
+
+apply from: "build-glassfish-common.gradle"
