@@ -10,7 +10,7 @@ task unpackContainer(type: Copy) {
   from { zipTree( downloadFile("https://github.com/payara/Payara/releases/download/payara-server-4.1.144/payara.zip"))}
   into 'build/unpack'
   doLast {
-    ant.rename(src: 'build/unpack/payara', dest: 'build/unpack/glassfish')
+    ant.rename(src: 'build/unpack/payara41', dest: 'build/unpack/glassfish')
   }
 }
 
