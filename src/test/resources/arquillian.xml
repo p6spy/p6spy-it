@@ -23,7 +23,15 @@
 			<property name="remoteServerAdminPort">4848</property>
 		</configuration>
 	</container>
-	
+
+	<container qualifier="payara4x">
+		<configuration>
+			<property name="remoteServerAddress">localhost</property>
+			<property name="remoteServerHttpPort">8080</property>
+			<property name="remoteServerAdminPort">4848</property>
+		</configuration>
+	</container>
+
 	<container qualifier="wildfly81x">
 	<configuration></configuration>
 	</container>

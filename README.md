@@ -19,6 +19,7 @@ where following are available `<app_server>`s provided:
   * `jboss61x` - JBoss 6.1.0.Final
   * `jboss51x` - JBoss 5.1.0.GA
   * `jboss42x` - JBoss 4.2.3.GA
+  * `payara4x` - Payara 4.1.144
   * `glassfish4x` - Glassfish 4.0
   * `glassfish31x` - Glassfish 3.1.2.2
   * `tomcat8x` - Tomcat 8.0.15
