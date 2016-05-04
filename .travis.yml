@@ -28,3 +28,5 @@ script: ./gradlew unitTest --info
 notifications:
 email:
   - p6spy-developers@googlegroups.com
+
+  
