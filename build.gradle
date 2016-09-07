@@ -52,8 +52,8 @@ ext {
     arquillian_tomcat: '1.0.0.CR6',
     arquillian_tomee: '1.6.0.2',
     
-    shrinkwrap_resolver: '2.2.0-alpha-1',
-    shrinkwrap_descriptor: '2.0.0-alpha-6',
+    shrinkwrap_resolver: '3.0.0-alpha-1',
+    shrinkwrap_descriptor: '2.0.0-alpha-9',
     
     junit: '4.11',
     hamcrest: '1.3',
