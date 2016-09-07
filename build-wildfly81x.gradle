@@ -35,7 +35,7 @@ task deployP6SpyJar(type: Copy, dependsOn: unpackContainer) {
   from configurations.p6spyAll
   into rootDir + "/modules/system/layers/base/com/p6spy/main"
   include "**/p6spy*.jar"
-  rename 'p6spy([A-Z0-9.-]+)jar', 'p6spy.jar'
+  rename 'p6spy(.+)jar', 'p6spy.jar'
 }
 
 task copyConfig(type: Copy, dependsOn: unpackContainer) {
