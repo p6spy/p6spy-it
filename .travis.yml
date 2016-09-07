@@ -20,6 +20,17 @@ env:
     - AS=tomee16xweb
     - AS=tomee16xplus
     # - AS=wls12x
+    exclude:
+    # http://stackoverflow.com/questions/22462936/will-it-be-possible-to-use-java-8-on-glassfish-3
+    - jdk: oraclejdk8
+      env: AS=glassfish31x
+    # http://stackoverflow.com/questions/28496816/is-jdk8-a-supported-platform-for-jboss-6-as
+    - jdk: oraclejdk8
+      env: AS=jboss61x
+    - jdk: oraclejdk8
+      env: AS=jboss51x
+    - jdk: oraclejdk8
+      env: AS=jboss42x
 
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
