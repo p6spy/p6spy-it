@@ -5,22 +5,23 @@ jdk:
   - oraclejdk8
 
 env:
-  matrix:
-    - AS=wildfly81x
-    #- AS=jboss71x
-    - AS=jboss61x
-    - AS=jboss51x
-    - AS=jboss42x
-    - AS=payara4x
-    - AS=glassfish4x
-    - AS=glassfish31x
-    - AS=tomcat8x
-    - AS=tomcat7x
-    - AS=tomcat6x
-    - AS=tomee16xweb
-    - AS=tomee16xplus
-    # - AS=wls12x
-    exclude:
+  - AS=wildfly81x
+  #- AS=jboss71x
+  - AS=jboss61x
+  - AS=jboss51x
+  - AS=jboss42x
+  - AS=payara4x
+  - AS=glassfish4x
+  - AS=glassfish31x
+  - AS=tomcat8x
+  - AS=tomcat7x
+  - AS=tomcat6x
+  - AS=tomee16xweb
+  - AS=tomee16xplus
+  # - AS=wls12x
+
+matrix:  
+  exclude:
     # http://stackoverflow.com/questions/22462936/will-it-be-possible-to-use-java-8-on-glassfish-3
     - jdk: oraclejdk8
       env: AS=glassfish31x
