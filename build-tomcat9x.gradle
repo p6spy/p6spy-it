@@ -1,0 +1,19 @@
+configurations {
+  tomcat9xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {
+    tomcat9xTestRuntime "org.jboss.arquillian.container:arquillian-tomcat-managed-7:$libraryVersions.arquillian_tomcat"
+}
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-9/v9.0.0.M10/bin/apache-tomcat-9.0.0.M10.zip"))}
+  into 'build/unpack'
+  doLast {
+    ant.rename(src: 'build/unpack/apache-tomcat-9.0.0.M10', dest: 'build/unpack/apache-tomcat')
+  // let's make to have stuff executable
+//  ant.chmod( dir: "$binDir", includes: "*.sh", perm: "+x")
+  }
+}
+
+apply from: "build-tomcat-common.gradle"

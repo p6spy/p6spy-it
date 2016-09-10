@@ -22,6 +22,7 @@ where following are available `<app_server>`s provided:
   * `payara4x` - Payara 4.1.144
   * `glassfish4x` - Glassfish 4.0
   * `glassfish31x` - Glassfish 3.1.2.2
+  * `tomcat9x` - Tomcat 9.0.0 M10
   * `tomcat8x` - Tomcat 8.0.15
   * `tomcat7x` - Tomcat 7.0.54
   * `tomcat6x` - Tomcat 6.0.39

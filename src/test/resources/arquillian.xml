@@ -106,6 +106,18 @@
         </configuration>
 	</container>
 
+	<container qualifier="tomcat9x">
+		<configuration>
+			<property name="catalinaHome">build/unpack/apache-tomcat</property>
+            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
+			<property name="httpPort">8089</property>
+            <property name="httpPort">8080</property>
+            <property name="user">admin</property>
+            <property name="pass">admin</property>
+            <!-- <property name="javaVmArguments">-DbuildDir=${buildDir}</property> -->
+        </configuration>
+	</container>
+
 	<container qualifier="tomee16xweb">
         <configuration>
                <property name="httpPort">-1</property>

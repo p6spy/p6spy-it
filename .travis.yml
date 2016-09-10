@@ -13,11 +13,12 @@ env:
   - AS=payara4x
   - AS=glassfish4x
   - AS=glassfish31x
+  - AS=tomcat9x
   - AS=tomcat8x
   - AS=tomcat7x
   - AS=tomcat6x
   - AS=tomee16xweb
-  - AS=tomee16xplus
+  - AS=tomee16xplus 
   # - AS=wls12x
 
 matrix:  
