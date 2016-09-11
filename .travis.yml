@@ -20,6 +20,7 @@ env:
   - AS=tomee16xweb
   - AS=tomee16xplus 
   # - AS=wls12x
+  - wlp16x
 
 matrix:  
   exclude:

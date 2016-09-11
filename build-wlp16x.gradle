@@ -1,0 +1,75 @@
+import org.apache.tools.ant.filters.ReplaceTokens;
+
+// didn't figure out yet how to use neither java.sql.Driver nor javax.sql.XADataSource => exclude those tests
+unitTest.useJUnit {
+      excludeCategories 'com.p6spy.engine.spy.DriverTests', 'com.p6spy.engine.spy.XADataSourceTests'
+}
+
+configurations {
+  wlp16xTestRuntime { extendsFrom testRuntime }
+}
+
+dependencies {  
+  wlp16xTestRuntime "org.jboss.arquillian.container:arquillian-wlp-remote-8.5:$libraryVersions.arquillian_wlp"
+}
+
+String rootDir = "$buildDir/unpack/wlp"
+String serverName = "myserver"
+String serverDir = "$rootDir/usr/servers/$serverName"
+
+task unpackContainer(type: Copy) {
+  from { zipTree( downloadFile("https://repo1.maven.org/maven2/com/ibm/websphere/appserver/runtime/wlp-javaee7/16.0.0.2/wlp-javaee7-16.0.0.2.zip")) }
+  into 'build/unpack'
+}
+
+task createServer(type:Exec, dependsOn: unpackContainer) {
+  workingDir rootDir + '/bin'
+  commandLine './server', 'create', serverName
+}
+
+task installServerFeatures(type:Exec, dependsOn: createServer) {
+  workingDir rootDir + '/bin'
+  commandLine './installUtility', 'install', '--acceptLicense', 'jsp-2.2', 'cdi-1.0', 'jdbc-4.0', 'jaxrs-1.1', 'jsf-2.0'
+}
+
+createServer.finalizedBy installServerFeatures
+
+task patchContainer(type: Copy, dependsOn: createServer) {
+  from "$buildDir/../src/test/container/wlp16x"
+  into rootDir
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task setupServer(type:Exec, dependsOn: patchContainer) {
+  // generate ssl certificate (see: http://portal2portal.blogspot.sk/2015/05/websphere-liberty-profile-and-ibm-http.html)
+  workingDir rootDir + '/bin'
+  commandLine './securityUtility', 'createSSLCertificate', '--server=' + serverName, '--password=passw0rd', '--validity=365'
+}
+
+task deployJars(type: Copy, dependsOn: setupServer) {
+  from configurations.p6spyAll
+  into serverDir + '/resources/db'
+}
+
+task copyConfig(type: Copy, dependsOn: deployJars) {
+  from "$buildDir/../src/test/config/spy.properties"
+  into serverDir
+  filter(ReplaceTokens, tokens: [logDir: buildDir.getAbsolutePath()])
+}
+
+task startContainer(type:Exec, dependsOn: [ copyConfig, patchContainer]) {
+  workingDir rootDir + '/bin'
+  commandLine './server', 'start', serverName
+
+  doLast {
+    ant.exec(
+      dir: rootDir + '/bin',
+      executable: './importSslCertToJdk.sh'
+      )
+  }
+}
+
+task stopContainer(type:Exec, dependsOn: startContainer) {
+    workingDir rootDir + '/bin'
+  commandLine './server', 'stop', serverName
+}

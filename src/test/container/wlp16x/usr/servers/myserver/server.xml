@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Sample server.xml configuration for use with WLP remote Arquillian container 
+	adapter -->
+<server description="new server">
+	<featureManager>
+		<feature>jsp-2.2</feature>
+		<feature>jaxws-2.2</feature>
+		<feature>localConnector-1.0</feature>
+		<feature>jsf-2.0</feature>
+		<feature>jaxrs-1.1</feature>
+		<feature>cdi-1.0</feature>
+		<feature>restConnector-1.0</feature>
+		<feature>jdbc-4.0</feature>
+	</featureManager>
+
+	<httpEndpoint httpPort="9080" httpsPort="9443"
+		id="defaultHttpEndpoint"  />
+
+	<featureManager>
+        <feature>ssl-1.0</feature>
+    </featureManager>
+    <keyStore id="defaultKeyStore" password="{xor}Lz4sLChvLTs=" />
+
+	<!-- userName and password should also be set in arquillian.xml to these 
+		values -->
+	<quickStartSecurity userName="admin" userPassword="admin" />
+
+	<applicationMonitor updateTrigger="mbean" />
+	<logging consoleLogLevel="INFO" />
+
+
+	<!-- This section is needed to allow upload of files to the dropins directory, 
+		the remote container adapter relies on this configuration -->
+	<remoteFileAccess>
+		<writeDir>${server.config.dir}/dropins</writeDir>
+	</remoteFileAccess>
+
+
+	<!-- datasource config -->
+
+	<dataSource id="h2ConnectionPoolDataSourceS1" jndiName="jdbc/h2ConnectionPoolDataSourceS1" type="javax.sql.ConnectionPoolDataSource">
+	    <jdbcDriver
+	        javax.sql.ConnectionPoolDataSource="org.h2.jdbcx.JdbcDataSource"
+	        javax.sql.DataSource="org.h2.jdbcx.JdbcDataSource"
+	        javax.sql.XADataSource="org.h2.jdbcx.JdbcDataSource"
+	        libraryRef="P6spyLib"/>
+
+	    <properties
+	        URL="jdbc:h2:tcp://localhost:9091/${buildDir}/h2/s1/test1"
+	        user="sa"
+	        password="" />
+   </dataSource>
+   
+   	<dataSource id="p6spyConnectionPoolDataSourceS1Pool" jndiName="jdbc/p6SpyConnectionPoolDataSourceS1" type="java.sql.DataSource">
+	   <!-- TODO follow decision taken in wls discussion -->
+	    <jdbcDriver
+	        javax.sql.DataSource="com.p6spy.engine.spy.P6DataSourceCore"
+	        libraryRef="P6spyLib"/>
+
+	    <properties
+	        URL="jdbc:h2:tcp://localhost:9091/${buildDir}/h2/s1/test1"
+	        user="sa"
+	        password="" 
+	        realDataSource="jdbc/h2ConnectionPoolDataSourceS1"/>
+   </dataSource>
+
+	<library id="P6spyLib">
+		<fileset dir="${server.config.dir}/resources/db" includes="*.jar"/>
+	</library>
+
+</server>
+

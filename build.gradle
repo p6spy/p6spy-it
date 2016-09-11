@@ -40,6 +40,7 @@ ext {
     arquillian_spring: '1.0.0.Beta2',
     arquillian_glassfish: '1.0.0.CR4',
     arquillian_wls: '1.0.0.Alpha2',
+    arquillian_wlp: '1.0.0.Beta2',
     arquillian_wildfly81: "8.1.0.CR1",
     wildfly81: "8.1.0.CR1",
     arquillian_jboss7: '7.1.1.Final',
