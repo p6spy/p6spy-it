@@ -29,6 +29,7 @@ where following are available `<app_server>`s provided:
   * `tomee16xweb` - Tomee 1.6.0.2 Webprofile
   * `tomee16xplus` - Tomee 1.6.0.2 Plus
   * `wls12x` - WebLogic 12.1.3 (for development)
+  * `wlp16x` - Websphere Liberty Profile 16.0.0.2
 
 Debugging
 ---------
