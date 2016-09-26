@@ -84,6 +84,11 @@ configurations {
     p6spyAll { extendsFrom h2 }
 }
 
+// Override default 24h module caching in Gradle
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
 //configurations.p6spyAll {
 //  // check for updates on every build
 //  resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
