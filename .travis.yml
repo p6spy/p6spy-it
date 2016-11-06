@@ -19,8 +19,8 @@ env:
   - AS=tomcat6x
   - AS=tomee16xweb
   - AS=tomee16xplus 
-  # - AS=wls12x
-  - wlp16x
+  - AS=wls12x
+  - AS=wlp16x
 
 matrix:  
   exclude:
@@ -34,9 +34,20 @@ matrix:
       env: AS=jboss51x
     - jdk: oraclejdk8
       env: AS=jboss42x
+  # until we fix websphere integration
+  allow_failures:
+    - jdk: oraclejdk7
+      env: AS=wlp16x
+    - jdk: oraclejdk8
+      env: AS=wlp16x
 
 before_install:
-  - export ORG_GRADLE_PROJECT_container=${AS}
+  - export ORG_GRADLE_PROJECT_container=${AS}  
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+#  - sleep 3 # give xvfb some time to start
 
 script: ./gradlew unitTest --info
 

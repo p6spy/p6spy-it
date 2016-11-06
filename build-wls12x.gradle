@@ -17,17 +17,21 @@ String rootDir = "$buildDir/unpack/wls12"
 String domainDir = "$rootDir/user_projects/domains/mydomain"
 String serverDir = "$domainDir/servers/myserver"
 
-task unpackContainer(type: Copy) {
-  from { zipTree( downloadFile("https://www.dropbox.com/s/6spoe7ml1spqjmk/wls1213_dev.zip?dl=1")) }
+task downloadServer(type:Exec) {
+  workingDir "${buildDir}/.."
+  commandLine "./script/travis/wls12x_download.sh"
+}
+
+task unpackContainer(type: Copy, dependsOn: downloadServer) {
+  from { zipTree(new File("build/wls1213_dev.zip")) }
   into 'build/unpack'
-  
   doLast {
     ant.rename(src: 'build/unpack/wls12130', dest: 'build/unpack/wls12')
   }
 }
 
-task createDomain(dependsOn: unpackContainer) {
-  doLast {
+task createDomain(type: SpawnProcessTask, dependsOn: unpackContainer) {
+  doFirst {
     //
     // fix script to prevent input to be requested
     //
@@ -59,29 +63,19 @@ task createDomain(dependsOn: unpackContainer) {
       value: "weblogic.Server &"
       )
     
-    // let's make to have stuff executable
+    // set executable
     ant.chmod(
       dir: "$rootDir",
       includes: "configure.sh",
       perm: "+x"
       )
+  }
 
-    //
-    // start script
-    //
-    ant.exec(
-      dir: rootDir,
-      executable: './configure.sh'
-      )
-    {
-      env(
-        key: "CONFIG_JVM_ARGS",
-        value: "-Djava.security.egd=file:/dev/./urandom"
-        )
-    }
-    
-    
-    // it takes quite some time till wls boots, let's make sure we wait for it
+    command "/bin/sh -c $rootDir/configure.sh"
+    ready 'Domain creation finished'
+
+    doLast {
+      // it takes quite some time till wls boots, let's make sure we wait for it
     ant.waitfor(maxwait: "10", maxwaitunit: "minute") {
       socket (server: "localhost", port: "7001")
     }
@@ -91,7 +85,7 @@ task createDomain(dependsOn: unpackContainer) {
       dir: domainDir + '/bin',
       executable: './stopWebLogic.sh'
       )
-  } 
+    }
 }
 
 task deployJars(type: Copy, dependsOn: createDomain) {
@@ -134,7 +128,7 @@ task createH2ConnectionPoolDataSourceS1(dependsOn:startContainer) {
       )
     {
       arg(value: "-c")
-      arg(value: "source $domainDir/bin/setDomainEnv.sh && java weblogic.WLST $rootDir/../../../script/travis/wls12x_ds.py 'h2ConnectionPoolDataSourceS1' 'jdbc/h2ConnectionPoolDataSourceS1' 'org.h2.jdbcx.JdbcDataSource' 'jdbc:h2:tcp://localhost:9091//home/peterb/all/prg/oss/p6spy-it/build/h2/s1/test1'")
+      arg(value: "source $domainDir/bin/setDomainEnv.sh && java weblogic.WLST $rootDir/../../../script/travis/wls12x_ds.py 'h2ConnectionPoolDataSourceS1' 'jdbc/h2ConnectionPoolDataSourceS1' 'org.h2.jdbcx.JdbcDataSource' 'jdbc:h2:tcp://localhost:9091/$buildDir/h2/s1/test1'")
     }
   }
 }
@@ -148,7 +142,7 @@ task createP6SpyDriverS1(dependsOn:createH2ConnectionPoolDataSourceS1) {
       )
     {
       arg(value: "-c")
-      arg(value: "source $domainDir/bin/setDomainEnv.sh && java weblogic.WLST $rootDir/../../../script/travis/wls12x_ds.py 'p6SpyDriverS1' 'jdbc/p6SpyDriverS1' 'com.p6spy.engine.spy.P6SpyDriver' 'jdbc:p6spy:h2:tcp://localhost:9091//home/peterb/all/prg/oss/p6spy-it/build/h2/s1/test3'")
+      arg(value: "source $domainDir/bin/setDomainEnv.sh && java weblogic.WLST $rootDir/../../../script/travis/wls12x_ds.py 'p6SpyDriverS1' 'jdbc/p6SpyDriverS1' 'com.p6spy.engine.spy.P6SpyDriver' 'jdbc:p6spy:h2:tcp://localhost:9091/$buildDir/h2/s1/test3'")
     }
   }
 }
