@@ -58,7 +58,7 @@ ext {
     arquillian_glassfish: '1.0.0.Final',
     arquillian_wls: '	1.0.1.Final',
     arquillian_wlp: '1.0.0.Beta2',
-    arquillian_wildfly81: "	8.2.1.Final",
+    arquillian_wildfly81: "8.2.1.Final",
     wildfly81: "8.1.0.CR1",
     arquillian_jboss7: '7.2.0.Final',
     arquillian_jboss61: '1.0.0.CR3',
