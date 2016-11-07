@@ -37,6 +37,9 @@ matrix:
     # gradle spawn plugin (mandatory for wls12x build) uses 1.8 source compatibility
     - jdk: oraclejdk7
       env: AS=wls12x
+    # jdk8 required
+    - jdk: oraclejdk7
+      env: AS=tomcat9x
   # until we fix websphere integration
   allow_failures:
     - jdk: oraclejdk7
