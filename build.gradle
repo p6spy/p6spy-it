@@ -52,26 +52,26 @@ ext {
   gradleWrapped = '3.0'
   
   libraryVersions = [
-    arquillian: '1.1.4.Final',
-    arquillian_transactions: '1.0.1.Final',
-    arquillian_spring: '1.0.0.Beta2',
-    arquillian_glassfish: '1.0.0.CR4',
-    arquillian_wls: '1.0.0.Alpha2',
+    arquillian: '1.1.11.Final',
+    arquillian_transactions: '1.0.3.Final',
+    arquillian_spring: '1.1.0.Alpha1',
+    arquillian_glassfish: '1.0.0.Final',
+    arquillian_wls: '	1.0.1.Final',
     arquillian_wlp: '1.0.0.Beta2',
-    arquillian_wildfly81: "8.1.0.CR1",
+    arquillian_wildfly81: "	8.2.1.Final",
     wildfly81: "8.1.0.CR1",
-    arquillian_jboss7: '7.1.1.Final',
+    arquillian_jboss7: '7.2.0.Final',
     arquillian_jboss61: '1.0.0.CR3',
     jboss61x: '6.1.0.Final',
     arquillian_jboss51: '1.0.0.CR3',
     jboss51x: '5.1.0.GA',
     arquillian_jboss42: '1.0.0.CR3',
     jboss42x: '4.2.3.GA',
-    arquillian_tomcat: '1.0.0.CR6',
-    arquillian_tomee: '1.6.0.2',
+    arquillian_tomcat: '1.0.0.CR7',
+    arquillian_tomee: '1.7.4',
     
     shrinkwrap_resolver: '3.0.0-alpha-1',
-    shrinkwrap_descriptor: '2.0.0-alpha-9',
+    shrinkwrap_descriptor: '2.0.0-alpha-10',
     
     junit: '4.11',
     hamcrest: '1.3',
@@ -86,7 +86,7 @@ ext {
     log4j: '1.2.17',
     
     h2: '1.4.177',
-    p6spy: 'latest.integration',
+    p6spy: '3.0.0',
   ]
   
   // Export methods by turning them into closures
