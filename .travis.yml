@@ -34,6 +34,9 @@ matrix:
       env: AS=jboss51x
     - jdk: oraclejdk8
       env: AS=jboss42x
+    # gradle spawn plugin (mandatory for wls12x build) uses 1.8 source compatibility
+    - jdk: oraclejdk7
+      env: AS=wls12x
   # until we fix websphere integration
   allow_failures:
     - jdk: oraclejdk7
