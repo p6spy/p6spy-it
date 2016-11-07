@@ -41,10 +41,10 @@ matrix:
     - jdk: oraclejdk7
       env: AS=tomcat9x
     # tomee arquilian integration has trouble with jdk 8 => skip it
-     - jdk: oraclejdk8
-       env: AS=tomee16xweb
-     - jdk: oraclejdk8
-       env: AS=tomee16xplus
+    - jdk: oraclejdk8
+      env: AS=tomee16xweb
+    - jdk: oraclejdk8
+      env: AS=tomee16xplus
   # until we fix websphere integration
   allow_failures:
     - jdk: oraclejdk7
