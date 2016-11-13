@@ -26,8 +26,9 @@ where following are available `<app_server>`s provided:
   * `tomcat8x` - Tomcat 8.0.15
   * `tomcat7x` - Tomcat 7.0.54
   * `tomcat6x` - Tomcat 6.0.39
-  * `tomee16xweb` - Tomee 1.6.0.2 Webprofile
-  * `tomee16xplus` - Tomee 1.6.0.2 Plus
+  * `tomee7xweb` - Tomee 7.0.2 Webprofile
+  * `tomee7xplus` - Tomee 7.0.2 Plus
+  * `tomee7xplume` - Tomee 7.0.2 Plume
   * `wls12x` - WebLogic 12.1.3 (for development)
   * `wlp16x` - Websphere Liberty Profile 16.0.0.2
 

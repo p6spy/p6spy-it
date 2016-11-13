@@ -64,7 +64,7 @@
 	<container qualifier="jboss42x">
 		<configuration>
 			<property name="jbossHome">build/unpack/jboss</property>
-			<property name="httpPort">8080</property>
+			<property name="bindHttpPort">8080</property>
 			<property name="rmiPort">1099</property>
 			<property name="profileName">default</property>
 		</configuration>
@@ -73,10 +73,9 @@
 	<container qualifier="tomcat6x">
 		<configuration>
 			<property name="catalinaHome">build/unpack/apache-tomcat</property>
-            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
-            <!-- <property name="javaVmArguments">-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y -Xmx512m -XX:MaxPermSize=128m</property> -->
-			<property name="httpPort">8089</property>
-            <property name="httpPort">8080</property>
+            <property name="jmxPort">8050</property>
+			<property name="bindHttpPort">8080</property>
+			<property name="httpPort">8080</property>
             <property name="user">admin</property>
             <property name="pass">admin</property>
         </configuration>
@@ -85,10 +84,9 @@
 	<container qualifier="tomcat7x">
 		<configuration>
 			<property name="catalinaHome">build/unpack/apache-tomcat</property>
-            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
-            <!-- <property name="javaVmArguments">-Xrunjdwp:transport=dt_socket,address=5005,server=y,suspend=y -Xmx512m -XX:MaxPermSize=128m</property> -->
-			<property name="httpPort">8089</property>
-            <property name="httpPort">8080</property>
+            <property name="jmxPort">8050</property>
+			<property name="bindHttpPort">8080</property>
+			<property name="httpPort">8080</property>
             <property name="user">admin</property>
             <property name="pass">admin</property>
         </configuration>
@@ -97,42 +95,49 @@
 	<container qualifier="tomcat8x">
 		<configuration>
 			<property name="catalinaHome">build/unpack/apache-tomcat</property>
-            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
-			<property name="httpPort">8089</property>
-            <property name="httpPort">8080</property>
+            <property name="jmxPort">8050</property>
+			<property name="bindHttpPort">8080</property>
+			<property name="httpPort">8080</property>
             <property name="user">admin</property>
             <property name="pass">admin</property>
-            <!-- <property name="javaVmArguments">-DbuildDir=${buildDir}</property> -->
         </configuration>
 	</container>
 
 	<container qualifier="tomcat9x">
 		<configuration>
 			<property name="catalinaHome">build/unpack/apache-tomcat</property>
-            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
-			<property name="httpPort">8089</property>
-            <property name="httpPort">8080</property>
+            <property name="jmxPort">8050</property>
+			<property name="bindHttpPort">8080</property>
+			<property name="httpPort">8080</property>
             <property name="user">admin</property>
             <property name="pass">admin</property>
-            <!-- <property name="javaVmArguments">-DbuildDir=${buildDir}</property> -->
         </configuration>
 	</container>
 
-	<container qualifier="tomee16xweb">
+	<container qualifier="tomee7xweb">
         <configuration>
-               <property name="httpPort">-1</property>
-               <property name="stopPort">-1</property>
-               <property name="ajpPort">-1</property>
-               <property name="dir">build/unpack/apache-tomcat</property>
+			   <property name="httpPort">-1</property>
+				<property name="ajpPort">-1</property>
+				<property name="stopPort">-1</property>
+				<property name="dir">build/unpack/apache-tomcat</property>
            </configuration>
 	</container>
 	
-	<container qualifier="tomee16xplus">
+	<container qualifier="tomee7xplus">
         <configuration>
                <property name="httpPort">-1</property>
-               <property name="stopPort">-1</property>
-               <property name="ajpPort">-1</property>
-               <property name="dir">build/unpack/apache-tomcat</property>
+				<property name="ajpPort">-1</property>
+				<property name="stopPort">-1</property>
+				<property name="dir">build/unpack/apache-tomcat</property>
+           </configuration>
+	</container>
+
+	<container qualifier="tomee7xplume">
+        <configuration>
+			   <property name="httpPort">-1</property>
+				<property name="ajpPort">-1</property>
+				<property name="stopPort">-1</property>
+				<property name="dir">build/unpack/apache-tomcat</property>
            </configuration>
 	</container>
 

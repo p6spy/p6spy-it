@@ -17,8 +17,9 @@ env:
   - AS=tomcat8x
   - AS=tomcat7x
   - AS=tomcat6x
-  - AS=tomee16xweb
-  - AS=tomee16xplus 
+  - AS=tomee7xweb
+  - AS=tomee7xplus 
+  - AS=tomee7xplume
   - AS=wls12x
   - AS=wlp16x
 
@@ -40,11 +41,6 @@ matrix:
     # jdk8 required
     - jdk: oraclejdk7
       env: AS=tomcat9x
-    # tomee arquilian integration has trouble with jdk 8 => skip it
-    - jdk: oraclejdk8
-      env: AS=tomee16xweb
-    - jdk: oraclejdk8
-      env: AS=tomee16xplus
   # until we fix websphere integration
   allow_failures:
     - jdk: oraclejdk7

@@ -28,9 +28,20 @@ task patchContainer(type: Copy, dependsOn: unpackContainer) {
   filter(ReplaceTokens, tokens: [buildDir: buildDir.getAbsolutePath()])
 }
 
-// managed adapter in use => no manual startup/shutdown required
-
-task startContainer(dependsOn: [ deployP6SpyJars, copyConfig, patchContainer] ) {
+task startContainer(type:Exec, dependsOn: [ deployP6SpyJars, copyConfig, patchContainer]) {
+  doFirst {
+    ant.chmod( dir: "$binDir", includes: "*.sh", perm: "+x")
+  }
+  workingDir binDir
+  commandLine 'bash', '-e', 'startup.sh'
+  
+  // not for tomee
+  if (!container.startsWith("tomee")) {
+    environment CATALINA_OPTS: "-Djava.rmi.server.hostname:127.0.0.1 -Dcom.sun.management.jmxremote.port=8050 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false"
+  }
 }
-task stopContainer(dependsOn: startContainer) {
+
+task stopContainer(type:Exec, dependsOn: startContainer) {
+  workingDir binDir
+  commandLine 'bash', '-e', 'shutdown.sh'
 }
