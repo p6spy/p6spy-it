@@ -11,14 +11,6 @@ buildscript {
       url "https://plugins.gradle.org/m2/"
     }
   }
-  dependencies {
-    classpath "gradle.plugin.com.wiredforcode:gradle-spawn-plugin:0.8.1"
-  }
-}
-
-// spawn plugin is compiled with source compatibility of 1.8
-if (JavaVersion.current() != JavaVersion.VERSION_1_7) {
-  apply plugin: "com.wiredforcode.spawn"
 }
 
 repositories { 

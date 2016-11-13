@@ -35,9 +35,6 @@ matrix:
       env: AS=jboss51x
     - jdk: oraclejdk8
       env: AS=jboss42x
-    # gradle spawn plugin (mandatory for wls12x build) uses 1.8 source compatibility
-    - jdk: oraclejdk7
-      env: AS=wls12x
     # jdk8 required
     - jdk: oraclejdk7
       env: AS=tomcat9x
