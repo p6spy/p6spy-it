@@ -26,12 +26,12 @@ task unpackContainer(type: Copy, dependsOn: downloadServer) {
   from { zipTree(new File("build/wls1213_dev.zip")) }
   into 'build/unpack'
   doLast {
-    ant.rename(src: 'build/unpack/wls12130', dest: 'build/unpack/wls12')
+    ant.rename(src: 'build/unpack/wls12130', dest: rootDir)
   }
 }
 
-task createDomain(type: SpawnProcessTask, dependsOn: unpackContainer) {
-  doFirst {
+  task createDomain(dependsOn: unpackContainer) {
+  doLast {
     //
     // fix script to prevent input to be requested
     //
@@ -69,12 +69,13 @@ task createDomain(type: SpawnProcessTask, dependsOn: unpackContainer) {
       includes: "configure.sh",
       perm: "+x"
       )
-  }
+  
+      ant.exec(
+        dir: "$rootDir",
+        spawn: true,
+        executable: './configure.sh'
+      )
 
-    command "/bin/sh -c $rootDir/configure.sh"
-    ready 'Domain creation finished'
-
-    doLast {
       // it takes quite some time till wls boots, let's make sure we wait for it
     ant.waitfor(maxwait: "10", maxwaitunit: "minute") {
       socket (server: "localhost", port: "7001")

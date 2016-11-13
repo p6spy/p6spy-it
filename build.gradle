@@ -56,7 +56,7 @@ ext {
     arquillian_transactions: '1.0.3.Final',
     arquillian_spring: '1.1.0.Alpha1',
     arquillian_glassfish: '1.0.0.Final',
-    arquillian_wls: '	1.0.1.Final',
+    arquillian_wls: '1.0.1.Final',
     arquillian_wlp: '1.0.0.Beta2',
     arquillian_wildfly81: "8.2.1.Final",
     wildfly81: "8.1.0.CR1",
