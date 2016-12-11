@@ -73,6 +73,7 @@ task unpackContainer(type: Copy, dependsOn: downloadServer) {
       ant.exec(
         dir: "$rootDir",
         spawn: true,
+        fork: true,
         executable: './configure.sh'
       )
 
