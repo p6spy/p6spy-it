@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    tomcat6xTestRuntime "org.jboss.arquillian.container:arquillian-tomcat-managed-6:$libraryVersions.arquillian_tomcat"
+    tomcat6xTestRuntime "org.jboss.arquillian.container:arquillian-tomcat-remote-6:$libraryVersions.arquillian_tomcat"
 }
 
 task unpackContainer(type: Copy) {
@@ -11,8 +11,6 @@ task unpackContainer(type: Copy) {
   into 'build/unpack'
   doLast {
     ant.rename(src: 'build/unpack/apache-tomcat-6.0.39', dest: 'build/unpack/apache-tomcat')
-  // let's make to have stuff executable
-//  ant.chmod( dir: "$binDir", includes: "*.sh", perm: "+x")
   }
 }
 

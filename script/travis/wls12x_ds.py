@@ -13,15 +13,17 @@ dsName=sys.argv[1]
 dsJNDIName=sys.argv[2]
 dsDriverName=sys.argv[3]
 dsURL=sys.argv[4]
+
+print dsURL
 # dsName='h2connectionpooldatasources1'
 # dsJNDIName='jdbc/h2ConnectionPoolDataSourceS1'
 # dsDriverName='org.h2.jdbcx.JdbcDataSource'
-# dsURL='jdbc:h2:tcp://localhost:9091//home/pb/all/prg/oss/p6spy-it/build/h2/s1/test1'
+# dsURL='jdbc:h2:tcp://localhost:9091/<full_path>/p6spy-it/build/h2/s1/test1'
 dsUserName='sa'
 dsPassword=''
  
 # DataSource Details for WebLogic
-dsTestQuery='SQL SELECT 1\r\n' # example specific for MySQL
+dsTestQuery='SELECT 1' # example specific for MySQL
 datasourceTarget='myserver' # can be a cluster or another managed server
  
 connect(adminUserName, adminPassword, adminURL)

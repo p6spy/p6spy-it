@@ -16,3 +16,6 @@ target
 downloads
 bin
 build
+
+# nodejs
+node_modules/
