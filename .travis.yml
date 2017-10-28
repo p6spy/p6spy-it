@@ -1,3 +1,7 @@
+sudo: required
+
+dist: trusty
+
 language: java
 
 jdk:
@@ -55,7 +59,6 @@ cache:
   directories:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
-- $HOME/.sonar/cache
 
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
