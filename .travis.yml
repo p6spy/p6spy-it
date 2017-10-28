@@ -44,7 +44,7 @@ matrix:
       env: AS=wlp16x
     # TODO weblogic integration should work in general, didn't make it working on travis yet however
     - jdk: oraclejdk8
-      env: AS=wlp16x
+      env: AS=wls12x
 
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
