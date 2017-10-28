@@ -46,6 +46,17 @@ matrix:
     - jdk: oraclejdk8
       env: AS=wls12x
 
+# https://docs.travis-ci.com/user/languages/java/#Caching
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -rf $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+- $HOME/.sonar/cache
+
 before_install:
   - export ORG_GRADLE_PROJECT_container=${AS}
   - nvm install node && nvm use node # use the latest node version
