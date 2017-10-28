@@ -1,47 +1,48 @@
 language: java
 
 jdk:
-  - oraclejdk7
+  # - oraclejdk7
   - oraclejdk8
 
 env:
   - AS=wildfly81x
   #- AS=jboss71x
-  - AS=jboss61x
-  - AS=jboss51x
-  - AS=jboss42x
-  - AS=payara4x
+  # - AS=jboss61x
+  # - AS=jboss51x
+  # - AS=jboss42x
+  # - AS=payara4x
   - AS=glassfish4x
-  - AS=glassfish31x
+  # - AS=glassfish31x
   - AS=tomcat9x
   - AS=tomcat8x
   - AS=tomcat7x
   - AS=tomcat6x
   - AS=tomee7xweb
-  - AS=tomee7xplus 
+  - AS=tomee7xplus
   - AS=tomee7xplume
   - AS=wls12x
   - AS=wlp16x
 
-matrix:  
-  exclude:
-    # http://stackoverflow.com/questions/22462936/will-it-be-possible-to-use-java-8-on-glassfish-3
-    - jdk: oraclejdk8
-      env: AS=glassfish31x
-    # http://stackoverflow.com/questions/28496816/is-jdk8-a-supported-platform-for-jboss-6-as
-    - jdk: oraclejdk8
-      env: AS=jboss61x
-    - jdk: oraclejdk8
-      env: AS=jboss51x
-    - jdk: oraclejdk8
-      env: AS=jboss42x
-    # jdk8 required
-    - jdk: oraclejdk7
-      env: AS=tomcat9x
-  # until we fix websphere integration
+matrix:
+  # exclude:
+  #   # http://stackoverflow.com/questions/22462936/will-it-be-possible-to-use-java-8-on-glassfish-3
+  #   - jdk: oraclejdk8
+  #     env: AS=glassfish31x
+  #   # http://stackoverflow.com/questions/28496816/is-jdk8-a-supported-platform-for-jboss-6-as
+  #   - jdk: oraclejdk8
+  #     env: AS=jboss61x
+  #   - jdk: oraclejdk8
+  #     env: AS=jboss51x
+  #   - jdk: oraclejdk8
+  #     env: AS=jboss42x
+  #   # jdk8 required
+  #   - jdk: oraclejdk7
+  #     env: AS=tomcat9x
   allow_failures:
-    - jdk: oraclejdk7
+    # websphere integration know to be broken
+    - jdk: oraclejdk8
       env: AS=wlp16x
+    # TODO weblogic integration should work in general, didn't make it working on travis yet however
     - jdk: oraclejdk8
       env: AS=wlp16x
 
