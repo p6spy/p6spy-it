@@ -7,7 +7,7 @@ dependencies {
 }
 
 task unpackContainer(type: Copy) {
-  from { zipTree( downloadFile("http://download.java.net/glassfish/4.0/release/glassfish-4.0.zip"))}
+  from { zipTree( downloadFile("http://download.oracle.com/glassfish/4.0/release/glassfish-4.0.zip"))}
   into 'build/unpack'
   doLast {
     ant.rename(src: 'build/unpack/glassfish4', dest: 'build/unpack/glassfish')
