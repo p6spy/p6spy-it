@@ -1,13 +1,13 @@
 configurations {
-  tomee7xplumeTestRuntime { extendsFrom testRuntime }
+  tomee8xplumeTestRuntime { extendsFrom testRuntime }
 }
 
 ext {
-  tomee = "7.1.2"
+  tomee = "8.0.4"
 }
 
 dependencies {
-    tomee7xplumeTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
+  tomee8xplumeTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
 }
 
 String rootDir = "$buildDir/unpack/apache-tomcat"

@@ -24,6 +24,10 @@ env:
   - AS=tomee7xweb
   - AS=tomee7xplus
   - AS=tomee7xplume
+  - AS=tomee8xweb
+  - AS=tomee8xplus
+  - AS=tomee8xplume
+  - AS=tomee8xmicro
   - AS=wls12x
   - AS=wlp16x
 

@@ -7,10 +7,10 @@ dependencies {
 }
 
 task unpackContainer(type: Copy) {
-  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.15/bin/apache-tomcat-8.0.15.zip"))}
+  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.61/bin/apache-tomcat-8.5.61.zip"))}
   into 'build/unpack'
   doLast {
-    ant.rename(src: 'build/unpack/apache-tomcat-8.0.15', dest: 'build/unpack/apache-tomcat')
+    ant.rename(src: 'build/unpack/apache-tomcat-8.5.61', dest: 'build/unpack/apache-tomcat')
   }
 }
 

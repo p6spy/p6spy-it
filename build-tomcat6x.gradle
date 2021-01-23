@@ -7,10 +7,10 @@ dependencies {
 }
 
 task unpackContainer(type: Copy) {
-  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.39/bin/apache-tomcat-6.0.39.zip"))}
+  from { zipTree( downloadFile("http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.53/bin/apache-tomcat-6.0.53.zip"))}
   into 'build/unpack'
   doLast {
-    ant.rename(src: 'build/unpack/apache-tomcat-6.0.39', dest: 'build/unpack/apache-tomcat')
+    ant.rename(src: 'build/unpack/apache-tomcat-6.0.53', dest: 'build/unpack/apache-tomcat')
   }
 }
 

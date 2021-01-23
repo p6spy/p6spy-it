@@ -22,29 +22,37 @@ where following are available `<app_server>`s provided:
   * `payara4x` - Payara 4.1.144
   * `glassfish4x` - Glassfish 4.0
   * `glassfish31x` - Glassfish 3.1.2.2
-  * `tomcat9x` - Tomcat 9.0.0 M10
-  * `tomcat8x` - Tomcat 8.0.15
-  * `tomcat7x` - Tomcat 7.0.54
-  * `tomcat6x` - Tomcat 6.0.39
-  * `tomee7xweb` - Tomee 7.0.2 Webprofile
-  * `tomee7xplus` - Tomee 7.0.2 Plus
-  * `tomee7xplume` - Tomee 7.0.2 Plume
+  * `tomcat9x` - Tomcat 9.0.41
+  * `tomcat8x` - Tomcat 8.5.61
+  * `tomcat7x` - Tomcat 7.0.107
+  * `tomcat6x` - Tomcat 6.0.53
+  * `tomee7xweb` - Tomee 7.1.2 Webprofile
+  * `tomee7xplus` - Tomee 7.1.2 Plus
+  * `tomee7xplume` - Tomee 7.1.2 Plume
+  * `tomee8xweb` - Tomee 8.0.4 Webprofile
+  * `tomee8xplus` - Tomee 8.0.4 Plus
+  * `tomee8xplume` - Tomee 8.0.4 Plume
+  * `tomee8xmicro` - Tomee 8.0.4 Microprofile
   * `wls12x` - WebLogic 12.1.3 (for development)
   * `wlp16x` - Websphere Liberty Profile 16.0.0.2
 
 However, due to travis-ci restriction on jdk availabiluty (jdk 7 not working), only following run in our CI env:
-  * `wildfly81x` - Wildfly 8.1.0.Final
-  * `payara4x` - Payara 4.1.144
-  * `glassfish4x` - Glassfish 4.0
-  * `tomcat9x` - Tomcat 9.0.0 M10
-  * `tomcat8x` - Tomcat 8.0.15
-  * `tomcat7x` - Tomcat 7.0.54
-  * `tomcat6x` - Tomcat 6.0.39
-  * `tomee7xweb` - Tomee 7.0.2 Webprofile
-  * `tomee7xplus` - Tomee 7.0.2 Plus
-  * `tomee7xplume` - Tomee 7.0.2 Plume
-  * `wls12x` - WebLogic 12.1.3 (for development)
-  * `wlp16x` - Websphere Liberty Profile 16.0.0.2
+  * `wildfly81x`
+  * `payara4x`
+  * `glassfish4x`
+  * `tomcat9x`
+  * `tomcat8x`
+  * `tomcat7x`
+  * `tomcat6x`
+  * `tomee7xweb`
+  * `tomee7xplus`
+  * `tomee7xplume`
+  * `tomee8xweb`
+  * `tomee8xplus`
+  * `tomee8xplume`
+  * `tomee8xmicro`
+  * `wls12x`
+  * `wlp16x`
 
 Debugging
 ---------
