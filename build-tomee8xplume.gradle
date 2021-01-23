@@ -7,7 +7,7 @@ ext {
 }
 
 dependencies {
-    tomee7xplumeTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
+  tomee8xplumeTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
 }
 
 String rootDir = "$buildDir/unpack/apache-tomcat"
