@@ -22,7 +22,6 @@ where following are available `<app_server>`s provided:
   * `payara4x` - Payara 4.1.144
   * `glassfish4x` - Glassfish 4.0
   * `glassfish31x` - Glassfish 3.1.2.2
-  * `tomcat10x` - Tomcat 10.0.0   
   * `tomcat9x` - Tomcat 9.0.41
   * `tomcat8x` - Tomcat 8.5.61
   * `tomcat7x` - Tomcat 7.0.107
@@ -48,6 +47,10 @@ However, due to travis-ci restriction on jdk availabiluty (jdk 7 not working), o
   * `tomee7xweb`
   * `tomee7xplus`
   * `tomee7xplume`
+  * `tomee8xweb`
+  * `tomee8xplus`
+  * `tomee8xplume`
+  * `tomee8xmicro`
   * `wls12x`
   * `wlp16x`
 
