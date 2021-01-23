@@ -17,6 +17,7 @@ env:
   # - AS=payara4x
   - AS=glassfish4x
   # - AS=glassfish31x
+  - AS=tomcat10x
   - AS=tomcat9x
   - AS=tomcat8x
   - AS=tomcat7x
