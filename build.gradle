@@ -19,10 +19,10 @@ repositories {
 
   // required by: org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:2.2.0-alpha-1
   maven {
-    url 'http://repo.gradle.org/gradle/libs-releases-local'
+    url 'https://repo.gradle.org/gradle/libs-releases-local'
   }
   maven {
-    url 'http://repository.jboss.org/nexus/content/groups/public/'
+    url 'https://repository.jboss.org/nexus/content/groups/public/'
   }
 
   // required by jboss51x
@@ -264,8 +264,3 @@ task stopH2S2(type: JavaExec, dependsOn: startH2S2) {
 
 startContainer.dependsOn startH2S1, startH2S2
 stopContainer.finalizedBy stopH2S1, stopH2S2
-
-
-task wrapper(type: Wrapper, description: 'Gradle Wrapper task') {
-  gradleVersion = '4.2.1'
-}
