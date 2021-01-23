@@ -114,6 +114,17 @@
         </configuration>
 	</container>
 
+	<container qualifier="tomcat10x">
+		<configuration>
+			<property name="catalinaHome">build/unpack/apache-tomcat</property>
+			<property name="jmxPort">8050</property>
+			<property name="bindHttpPort">8080</property>
+			<property name="httpPort">8080</property>
+			<property name="user">admin</property>
+			<property name="pass">admin</property>
+		</configuration>
+	</container>
+
 	<container qualifier="tomee7xweb">
         <configuration>
 			   <property name="httpPort">-1</property>
@@ -139,6 +150,42 @@
 				<property name="stopPort">-1</property>
 				<property name="dir">build/unpack/apache-tomcat</property>
            </configuration>
+	</container>
+
+	<container qualifier="tomee8xweb">
+		<configuration>
+			<property name="httpPort">-1</property>
+			<property name="ajpPort">-1</property>
+			<property name="stopPort">-1</property>
+			<property name="dir">build/unpack/apache-tomcat</property>
+		</configuration>
+	</container>
+
+	<container qualifier="tomee8xplus">
+		<configuration>
+			<property name="httpPort">-1</property>
+			<property name="ajpPort">-1</property>
+			<property name="stopPort">-1</property>
+			<property name="dir">build/unpack/apache-tomcat</property>
+		</configuration>
+	</container>
+
+	<container qualifier="tomee8xplume">
+		<configuration>
+			<property name="httpPort">-1</property>
+			<property name="ajpPort">-1</property>
+			<property name="stopPort">-1</property>
+			<property name="dir">build/unpack/apache-tomcat</property>
+		</configuration>
+	</container>
+
+	<container qualifier="tomee8xmicro">
+		<configuration>
+			<property name="httpPort">-1</property>
+			<property name="ajpPort">-1</property>
+			<property name="stopPort">-1</property>
+			<property name="dir">build/unpack/apache-tomcat</property>
+		</configuration>
 	</container>
 
 	<container qualifier="wls12x">
