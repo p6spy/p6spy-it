@@ -3,7 +3,7 @@ configurations {
 }
 
 ext {
-  tomee = "7.0.2"
+  tomee = "7.1.2"
 }
 
 dependencies {
