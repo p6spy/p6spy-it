@@ -114,17 +114,6 @@
         </configuration>
 	</container>
 
-	<container qualifier="tomcat10x">
-		<configuration>
-			<property name="catalinaHome">build/unpack/apache-tomcat</property>
-			<property name="jmxPort">8050</property>
-			<property name="bindHttpPort">8080</property>
-			<property name="httpPort">8080</property>
-			<property name="user">admin</property>
-			<property name="pass">admin</property>
-		</configuration>
-	</container>
-
 	<container qualifier="tomee7xweb">
         <configuration>
 			   <property name="httpPort">-1</property>
