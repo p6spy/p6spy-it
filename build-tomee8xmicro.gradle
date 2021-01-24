@@ -1,5 +1,5 @@
 configurations {
-  tomee8xmicroprofileTestRuntime { extendsFrom testRuntime }
+  tomee8xmicroTestRuntime { extendsFrom testRuntime }
 }
 
 ext {
@@ -7,7 +7,7 @@ ext {
 }
 
 dependencies {
-  tomee8xmicroprofileTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
+  tomee8xmicroTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
 }
 
 String rootDir = "$buildDir/unpack/apache-tomcat"
