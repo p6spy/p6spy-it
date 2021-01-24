@@ -1,5 +1,5 @@
 configurations {
-  tomee8xmicroprofileTestRuntime { extendsFrom testRuntime }
+  tomee8xmicroTestRuntime { extendsFrom testRuntime }
 }
 
 ext {
@@ -7,7 +7,7 @@ ext {
 }
 
 dependencies {
-  tomee8xmicroprofileTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
+  tomee8xmicroTestRuntime "org.apache.tomee:arquillian-tomee-remote:$tomee"
 }
 
 String rootDir = "$buildDir/unpack/apache-tomcat"
@@ -17,7 +17,7 @@ task unpackContainer(type: Copy) {
   from { zipTree( downloadFile("https://repo.maven.apache.org/maven2/org/apache/tomee/apache-tomee/$tomee/apache-tomee-$tomee-microprofile.zip"))}
   into 'build/unpack'
   doLast {
-    ant.rename(src: "build/unpack/apache-tomee-webprofile-$tomee", dest: 'build/unpack/apache-tomcat')
+    ant.rename(src: "build/unpack/apache-tomee-microprofile-$tomee", dest: 'build/unpack/apache-tomcat')
   }
 }
 
